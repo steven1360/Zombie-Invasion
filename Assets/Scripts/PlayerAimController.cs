@@ -6,15 +6,14 @@ public class PlayerAimController : MonoBehaviour
 {
     [SerializeField] private Camera cam;
 
-    public RaycastHit2D Raycast { get; private set; }
+    public Vector2 LookDirection { get; private set; }
+
 
     // Update is called once per frame
     void Update()
     {
         Vector2 mouseWorldPosition = cam.ScreenToWorldPoint(Input.mousePosition);
-        Vector2 playerToMouse = (mouseWorldPosition - (Vector2)transform.position).normalized;
-        Raycast = Physics2D.Raycast(transform.position, playerToMouse, 50, 1 << 10);
-        Debug.DrawRay(transform.position, playerToMouse * 50, Color.green);
+        LookDirection = (mouseWorldPosition - (Vector2)transform.position).normalized;
         LookAtMousePosition(mouseWorldPosition);
     }
 

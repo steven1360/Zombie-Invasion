@@ -12,13 +12,22 @@ public class KnifeAttack : MonoBehaviour
         anim = GetComponent<Animator>();
     }
 
-    public void Attack()
+    void Update()
     {
-        anim.SetTrigger("AttackBtnPressed");
-        StartCoroutine(Attack(0.1666667f));
+        DoAttackOnInput(Input.GetKeyDown(KeyCode.Mouse0));
     }
 
-    public AnimationClip GetAnimationClip(string name)
+
+     void DoAttackOnInput(bool keycodePresseDown)
+    {
+        if (keycodePresseDown)
+        {
+            anim.SetTrigger("AttackBtnPressed");
+            StartCoroutine(Attack(0.1666667f));
+        }
+    }
+
+    AnimationClip GetAnimationClip(string name)
     {
         AnimationClip[] clips = anim.runtimeAnimatorController.animationClips;
         foreach (AnimationClip clip in clips)

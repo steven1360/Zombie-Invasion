@@ -10,6 +10,7 @@ public class PlayerWeaponController : MonoBehaviour
     private Transform equippedWeapon;
 
     [SerializeField] private KnifeAttack knife;
+    [SerializeField] private FirearmAttack rifle;
 
     void Start()
     {
@@ -47,10 +48,6 @@ public class PlayerWeaponController : MonoBehaviour
             equippedWeapon = weaponsDict["Shotgun"];
         }
 
-        if (Input.GetKeyDown(KeyCode.Mouse0))
-        {
-            knife.Attack();
-        }
         UpdateEquippedWeaponInScene();
     }
 
