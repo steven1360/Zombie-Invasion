@@ -13,6 +13,7 @@ public class AnimFrameHitbox : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D col)
     {
+        Debug.Log("trigger hit");
         Hit = true;
     }
 

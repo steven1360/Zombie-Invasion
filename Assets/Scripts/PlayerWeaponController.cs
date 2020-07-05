@@ -6,17 +6,26 @@ using UnityEngine.Rendering;
 public class PlayerWeaponController : MonoBehaviour
 {
     private Dictionary<string, Transform> weaponsDict;
-    Transform[] weaponsArr;
+    private List<Transform> weaponsList;
     private Transform equippedWeapon;
-    private Animator anim;
-    private KnifeAttack knife;
+
+    [SerializeField] private KnifeAttack knife;
 
     void Start()
     {
-        weaponsArr = GetComponentsInChildren<Transform>();
+        Transform[] weapons = GetComponentsInChildren<Transform>();
+        weaponsList = new List<Transform>();
         weaponsDict = new Dictionary<string, Transform>();
 
-        foreach (Transform weapon in weaponsArr)
+        for (int i = 1; i < weapons.Length; i++)
+        {
+            if (weapons[i].parent == transform)
+            {
+                weaponsList.Add(weapons[i]);
+            }
+        }
+
+        foreach (Transform weapon in weaponsList)
         {
             weaponsDict.Add(weapon.name, weapon);
         }
@@ -47,21 +56,18 @@ public class PlayerWeaponController : MonoBehaviour
 
     void UpdateEquippedWeaponInScene()
     {
-
-        for (int i = 1; i < weaponsArr.Length; i++)
+        foreach (Transform weapon in weaponsList)
         {
-            if (weaponsArr[i].name == equippedWeapon.name)
+            if (weapon == equippedWeapon)
             {
-                weaponsArr[i].gameObject.SetActive(true);
+                weapon.gameObject.SetActive(true);
             }
             else
             {
-                weaponsArr[i].gameObject.SetActive(false);
+                weapon.gameObject.SetActive(false);
             }
         }
     }
-
-
 
 
 }

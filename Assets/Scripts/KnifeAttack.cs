@@ -6,41 +6,74 @@ public class KnifeAttack : MonoBehaviour
 {
     [SerializeField] private Knife knife;
     private Animator anim;
-
+ 
     void Start()
     {
         anim = GetComponent<Animator>();
     }
 
-    void Update()
-    {
-
-    }
-
     public void Attack()
     {
-        Debug.Log("Knife Attack");
         anim.SetTrigger("AttackBtnPressed");
-        StartCoroutine(Atk());
+        StartCoroutine(Attack(0.1666667f));
+    }
+
+    public AnimationClip GetAnimationClip(string name)
+    {
+        AnimationClip[] clips = anim.runtimeAnimatorController.animationClips;
+        foreach (AnimationClip clip in clips)
+        {
+            if(clip.name == name)
+            {
+                return clip;
+            }
+        }
+
+        return null;
     }
 
 
-    IEnumerator Atk()
+    IEnumerator Attack(float delay)
     {
-        float animClipLength = anim.GetCurrentAnimatorClipInfo(0)[0].clip.length;
-        int iterations = 30;
-        int i = 0;
-        float step = animClipLength / 30;
+        float y_position = 1.271f;
+        float animClipLength = GetAnimationClip("knife_meleeattack").length;
+        float y_bound_size = 1.457f;
+        float secondsPerStep = (0.4833f - 0.1666667f) / 40f;
+        float stepAmount = y_bound_size/40f + 0.093f;
+        float elapsedTime = 0;
+        Transform hitbox = gameObject.GetComponent<Transform>().GetChild(0);
 
-        while (i < iterations)
+        yield return new WaitForSeconds(delay);
+
+        SetHitBox(true);
+
+        while (y_position > -1.083f)
         {
-            float new_x_position = KnifePositionOverTime(step);
-            float new_y_position = step;
-            Transform hitbox = gameObject.GetComponent<Transform>().GetChild(0);
-            hitbox.position = new Vector2(new_x_position, new_y_position);
+            if (elapsedTime >= secondsPerStep)
+            {
+                elapsedTime = 0;
+                y_position -= stepAmount;
+                float x_position = KnifePositionOverTime(y_position);
+                
 
+                hitbox.localPosition = new Vector2(x_position, y_position);
+
+                if (y_position <= -1.083f)
+                {
+                    y_position = -1.083f;
+                }
+            }
+
+            if (hitbox.GetComponent<AnimFrameHitbox>().Hit)
+            {
+                Debug.Log("hit!");
+            }
+
+            elapsedTime += Time.deltaTime;
             yield return null;
         }
+        hitbox.localPosition = Vector2.zero;
+        SetHitBox(false);
 
     }
 
@@ -52,7 +85,7 @@ public class KnifeAttack : MonoBehaviour
         }
         else if (y < -0.185f)
         {
-            return 1.29f - Mathf.Pow(10, -y - 1.9f);
+            return 1.29f - Mathf.Pow(10, -y - 1.3f);
         }
         else if (y <= 1.271f)
         {
@@ -66,5 +99,10 @@ public class KnifeAttack : MonoBehaviour
         {
             return -1;
         }
+    }
+
+    void SetHitBox(bool status)
+    {
+        transform.GetChild(0).gameObject.SetActive(status);
     }
 }
