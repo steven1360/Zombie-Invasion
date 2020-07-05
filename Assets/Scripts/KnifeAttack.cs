@@ -6,22 +6,27 @@ public class KnifeAttack : MonoBehaviour
 {
     [SerializeField] private Knife knife;
     private Animator anim;
- 
+    private bool attacking;
+
     void Start()
     {
         anim = GetComponent<Animator>();
+        knife = Instantiate(knife);
+        attacking = false;
     }
 
     void Update()
     {
         DoAttackOnInput(Input.GetKeyDown(KeyCode.Mouse0));
+        knife.TickClock(Time.deltaTime);
     }
 
 
-     void DoAttackOnInput(bool keycodePresseDown)
+    void DoAttackOnInput(bool keycodePresseDown)
     {
-        if (keycodePresseDown)
+        if (keycodePresseDown && !knife.AttackInTimeout && !attacking)
         {
+            attacking = true;
             anim.SetTrigger("AttackBtnPressed");
             StartCoroutine(Attack(0.1666667f));
         }
@@ -32,7 +37,7 @@ public class KnifeAttack : MonoBehaviour
         AnimationClip[] clips = anim.runtimeAnimatorController.animationClips;
         foreach (AnimationClip clip in clips)
         {
-            if(clip.name == name)
+            if (clip.name == name)
             {
                 return clip;
             }
@@ -48,9 +53,10 @@ public class KnifeAttack : MonoBehaviour
         float animClipLength = GetAnimationClip("knife_meleeattack").length;
         float y_bound_size = 1.457f;
         float secondsPerStep = (0.4833f - 0.1666667f) / 40f;
-        float stepAmount = y_bound_size/40f + 0.093f;
+        float stepAmount = y_bound_size / 40f + 0.093f;
         float elapsedTime = 0;
         Transform hitbox = gameObject.GetComponent<Transform>().GetChild(0);
+        hitbox.GetComponent<AnimFrameHitbox>().SetDamageValue(knife.DamageValue);
 
         yield return new WaitForSeconds(delay);
 
@@ -63,7 +69,7 @@ public class KnifeAttack : MonoBehaviour
                 elapsedTime = 0;
                 y_position -= stepAmount;
                 float x_position = KnifePositionOverTime(y_position);
-                
+
 
                 hitbox.localPosition = new Vector2(x_position, y_position);
 
@@ -72,17 +78,14 @@ public class KnifeAttack : MonoBehaviour
                     y_position = -1.083f;
                 }
             }
-
-            if (hitbox.GetComponent<AnimFrameHitbox>().Hit)
-            {
-                Debug.Log("hit!");
-            }
+  
 
             elapsedTime += Time.deltaTime;
             yield return null;
         }
         hitbox.localPosition = Vector2.zero;
         SetHitBox(false);
+        attacking = false;
 
     }
 

@@ -2,23 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AnimFrameHitbox : MonoBehaviour
+public class AnimFrameHitbox : MonoBehaviour, IDamageSource
 {
-    public bool Hit { get; private set; }
-
-    void Start()
-    {
-        Hit = false;
-    }
+    private float damage;
+    public float DamageValue { get { return damage; } }
 
     void OnTriggerEnter2D(Collider2D col)
     {
-        Debug.Log("trigger hit");
-        Hit = true;
+        col.gameObject.GetComponent<Damageable>().RaiseFlag(DamageValue, Vector2.zero);
     }
 
-    public void AcknowledgeHit()
+    public void SetDamageValue(float value)
     {
-        Hit = false;
+        damage = value;
     }
 }

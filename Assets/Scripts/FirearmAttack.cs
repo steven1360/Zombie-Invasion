@@ -43,7 +43,7 @@ public class FirearmAttack : MonoBehaviour
             firearm.AttackTimeoutClock.ResetClock();
 
             bulletClone.gameObject.SetActive(true);
-            bulletClone.GetComponent<Bullet>().SetDamage(firearm.DamageValue);
+            bulletClone.GetComponent<IDamageSource>().SetDamageValue(firearm.DamageValue);
             bulletClone.position = aimControllerPosition;
             rb.velocity = bulletTravelDirection * speed;
         }

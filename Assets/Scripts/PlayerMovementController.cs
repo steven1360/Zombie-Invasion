@@ -7,7 +7,7 @@ public class PlayerMovementController : MonoBehaviour
     private Rigidbody2D rb;
 
     [SerializeField]
-    private float speed = 5f;
+    private float speed = 8f;
 
 
     void Start()
@@ -16,7 +16,7 @@ public class PlayerMovementController : MonoBehaviour
     }
 
 
-    void Update()
+    void FixedUpdate()
     {
         UpdatePlayerPosition();
     }
@@ -30,8 +30,8 @@ public class PlayerMovementController : MonoBehaviour
 
         destination += (Vector2.right * horizontal * speed * Time.deltaTime);
         destination += (Vector2.up * vertical * speed * Time.deltaTime);
-        //rb.MovePosition((Vector2)transform.parent.position + destination);
-        transform.parent.position += (Vector3)destination;
+        rb.MovePosition((Vector2)transform.parent.position + destination);
+        //transform.parent.position += (Vector3)destination;
     }
 
 }

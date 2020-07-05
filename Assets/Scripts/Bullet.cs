@@ -2,17 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bullet : MonoBehaviour
+public class Bullet : MonoBehaviour, IDamageSource
 {
-    private float damage;
+    public float damage;
+    public float DamageValue { get { return damage; } }
 
     void OnCollisionEnter2D(Collision2D col)
     {
-        Debug.Log("Bullet hit something");
+        col.gameObject.GetComponent<Damageable>().RaiseFlag(damage, Vector2.zero);
     }
 
-    public void SetDamage(float amount)
+    public void SetDamageValue(float value)
     {
-        damage = amount;
+        damage = value;
     }
 }
