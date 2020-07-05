@@ -5,89 +5,63 @@ using UnityEngine.Rendering;
 
 public class PlayerWeaponController : MonoBehaviour
 {
-    [SerializeField] private Knife knife;
-    [SerializeField] private Firearm[] firearms;
-
-    private Transform[] weapons;
-
-    public ScriptableObject EquippedWeapon { get; private set; }
+    private Dictionary<string, Transform> weaponsDict;
+    Transform[] weaponsArr;
+    private Transform equippedWeapon;
+    private Animator anim;
+    private KnifeAttack knife;
 
     void Start()
     {
-        EquippedWeapon = firearms[0];
-        weapons = GetComponentsInChildren<Transform>();
+        weaponsArr = GetComponentsInChildren<Transform>();
+        weaponsDict = new Dictionary<string, Transform>();
+
+        foreach (Transform weapon in weaponsArr)
+        {
+            weaponsDict.Add(weapon.name, weapon);
+        }
+        equippedWeapon = weaponsDict["Knife"];
     }
 
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            ChangeWeapon("Knife");
+            equippedWeapon = weaponsDict["Knife"];
         }
         else if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            ChangeWeapon("Rifle");
+            equippedWeapon = weaponsDict["Rifle"];
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            equippedWeapon = weaponsDict["Shotgun"];
+        }
+
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            knife.Attack();
         }
         UpdateEquippedWeaponInScene();
     }
 
-    void DoAttack()
-    {
-
-    }
-
-    void KnifeAttack(Knife knife)
-    {
-
-    }
-
-    void FirearmAttack(Firearm firearm)
-    {
-
-    }
-
     void UpdateEquippedWeaponInScene()
     {
-        foreach (Transform child in weapons)
+
+        for (int i = 1; i < weaponsArr.Length; i++)
         {
-            if (child.name == transform.name)
+            if (weaponsArr[i].name == equippedWeapon.name)
             {
-                continue;
-            }
-            else if (child.name == EquippedWeapon.name)
-            {
-                child.gameObject.SetActive(true);
+                weaponsArr[i].gameObject.SetActive(true);
             }
             else
             {
-                child.gameObject.SetActive(false);
+                weaponsArr[i].gameObject.SetActive(false);
             }
         }
     }
 
-    void ChangeWeapon(string name)
-    {
-        EquippedWeapon = GetWeapon(name);
-    }
 
-    ScriptableObject GetWeapon(string name)
-    {
-        ScriptableObject weapon = null;
 
-        if (name == "Knife")
-        {
-            weapon = knife;
-        }
-
-        foreach (Firearm firearm in firearms)
-        {
-            if (firearm.name == name)
-            {
-                weapon = firearm;
-            }
-        }
-
-        return weapon;
-    }
 
 }
