@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentMagazineCapacity: 18
   maxMagazineCapacity: 18
-  totalAmmo: 55
+  totalAmmo: 20
   reloadTimeInSeconds: 1
   fireRateInSeconds: 0.4
   damage: 10

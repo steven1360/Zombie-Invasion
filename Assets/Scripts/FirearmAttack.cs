@@ -7,8 +7,10 @@ public class FirearmAttack : MonoBehaviour
     [SerializeField] private Firearm firearm;
     [SerializeField] private float speed = 3f;
     [SerializeField] private PlayerAimController aimController;
+    [SerializeField] private PlayerMovementController movementController;
     private Animator anim;
     private Transform bullet;
+    private bool reloading;
 
     void Start()
     {
@@ -16,6 +18,7 @@ public class FirearmAttack : MonoBehaviour
         bullet = transform.GetChild(0);
         bullet.gameObject.SetActive(false);
         firearm = Instantiate(firearm);
+        reloading = false;
     }
 
     void Update()
@@ -24,6 +27,15 @@ public class FirearmAttack : MonoBehaviour
         ReloadWeaponOnInput(Input.GetKeyDown(KeyCode.R));
         firearm.TickClocks(Time.deltaTime);
 
+        if (!reloading && movementController.IsMoving)
+        {
+            anim.SetBool("moving", true);
+        }
+        else
+        {
+            anim.SetBool("moving", false);
+        }
+
         Debug.Log($"Ammo: {firearm.CurrentMagazineCapacity}/{firearm.MaxMagazineCapacity}    Total: {firearm.TotalAmmo}");
     }
 
@@ -31,7 +43,7 @@ public class FirearmAttack : MonoBehaviour
     {
         bool needToReload = (firearm.CurrentMagazineCapacity == 0);
 
-        if (keycodePressedDown && !needToReload && !firearm.AttackInTimeout && !firearm.Reloading)
+        if (keycodePressedDown && !needToReload && !firearm.AttackInTimeout && !reloading)
         {
             Vector2 bulletTravelDirection = aimController.LookDirection;
             Vector3 aimControllerPosition = aimController.transform.position;
@@ -51,19 +63,28 @@ public class FirearmAttack : MonoBehaviour
 
     void ReloadWeaponOnInput(bool keycodePressedDown)
     {
-        if (keycodePressedDown)
-        {
-            bool magazineIsFull = (firearm.MaxMagazineCapacity - firearm.CurrentMagazineCapacity) == 0;
-            bool TotalMagIsEmpty = (firearm.TotalAmmo == 0);
+        bool magazineIsFull = (firearm.MaxMagazineCapacity - firearm.CurrentMagazineCapacity) == 0;
+        bool TotalMagIsEmpty = (firearm.TotalAmmo == 0);
 
-            if (keycodePressedDown && !magazineIsFull && !TotalMagIsEmpty && !firearm.Reloading)
-            {
-                anim.SetTrigger("Reload");
+        if (!reloading && keycodePressedDown && !magazineIsFull && !TotalMagIsEmpty)
+        {
+            anim.SetTrigger("Reload");
+            StartCoroutine(ReloadWeaponOnInput(firearm.ReloadTimeInSeconds));
+            reloading = true;
+        }
+
+    }
+
+    IEnumerator ReloadWeaponOnInput(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
                 int amountToTakeFromTotal = Mathf.Min((firearm.MaxMagazineCapacity - firearm.CurrentMagazineCapacity), firearm.TotalAmmo);
                 firearm.AddToCurrentMagCapacity(amountToTakeFromTotal);
                 firearm.AddToTotalAmmo(-amountToTakeFromTotal);
                 firearm.ReloadClock.ResetClock();
-            }
-        }
+
+
+        reloading = false;
     }
 }

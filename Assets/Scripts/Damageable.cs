@@ -14,11 +14,16 @@ public class Damageable : MonoBehaviour
         DamageValue = 0;
     }
 
-    public void RaiseFlag(float damageAmount, Vector2 knockbackForce)
+    void Update()
+    {
+
+    }
+
+    public void RaiseFlag(float damageAmount, Vector2 knockbackForce )
     {
         TouchedByDamageSource = true;
         DamageValue = damageAmount;
-        //KnockbackEffect(knockbackForce);
+        KnockbackEffect(knockbackForce);
     }
 
     public void LowerFlag()
@@ -30,7 +35,6 @@ public class Damageable : MonoBehaviour
     void KnockbackEffect(Vector2 knockbackForce)
     {
         Debug.Log($"{transform.parent.name} was knocked back with a force of {knockbackForce.magnitude}");
-        Rigidbody2D rb = transform.parent.GetComponent<Rigidbody2D>();
-        rb.velocity = knockbackForce;
+        transform.root.position += (Vector3)knockbackForce;
     }
 }

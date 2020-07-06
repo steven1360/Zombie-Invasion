@@ -5,6 +5,7 @@ using UnityEngine;
 public class KnifeAttack : MonoBehaviour
 {
     [SerializeField] private Knife knife;
+    [SerializeField] private PlayerMovementController movementController;
     private Animator anim;
     private bool attacking;
 
@@ -19,6 +20,15 @@ public class KnifeAttack : MonoBehaviour
     {
         DoAttackOnInput(Input.GetKeyDown(KeyCode.Mouse0));
         knife.TickClock(Time.deltaTime);
+
+        if (!attacking && movementController.IsMoving)
+        {
+            anim.SetBool("moving", true);
+        }
+        else
+        {
+            anim.SetBool("moving", false);
+        }
     }
 
 

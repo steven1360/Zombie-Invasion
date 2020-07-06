@@ -48,6 +48,7 @@ public class PlayerWeaponController : MonoBehaviour
             equippedWeapon = weaponsDict["Shotgun"];
         }
 
+
         UpdateEquippedWeaponInScene();
     }
 

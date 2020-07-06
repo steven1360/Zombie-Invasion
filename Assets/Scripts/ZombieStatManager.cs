@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ZombieStatController : MonoBehaviour
+public class ZombieStatManager : MonoBehaviour
 {
     [SerializeField] private ZombieStats stats;
     [SerializeField] private Damageable damageable;
+
+    public ZombieStats Stats { get { return stats; } }
 
     void Start()
     {

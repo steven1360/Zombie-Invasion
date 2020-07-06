@@ -9,6 +9,7 @@ public class PlayerMovementController : MonoBehaviour
     [SerializeField]
     private float speed = 8f;
 
+    public bool IsMoving { get; private set; }
 
     void Start()
     {
@@ -31,6 +32,7 @@ public class PlayerMovementController : MonoBehaviour
         destination += (Vector2.right * horizontal * speed * Time.deltaTime);
         destination += (Vector2.up * vertical * speed * Time.deltaTime);
         rb.MovePosition((Vector2)transform.parent.position + destination);
+        IsMoving = (destination == Vector2.zero) ? false : true;
         //transform.parent.position += (Vector3)destination;
     }
 

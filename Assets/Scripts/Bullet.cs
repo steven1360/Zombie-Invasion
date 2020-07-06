@@ -4,15 +4,22 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour, IDamageSource
 {
-    public float damage;
+    [SerializeField] private PlayerAimController aimController;
+    private float damage;
     public float DamageValue { get { return damage; } }
 
-    void OnCollisionEnter2D(Collision2D col)
+    void OnTriggerEnter2D(Collider2D col)
     {
-        col.gameObject.GetComponent<Damageable>().RaiseFlag(damage, Vector2.zero);
+        if (transform.tag != col.transform.tag)
+        {
+            Damageable damageable = col.gameObject.GetComponent<Damageable>();
+            damageable.RaiseFlag(damage, aimController.LookDirection * 0.15f);
+            Destroy(gameObject);
+        }
+
     }
 
-    public void SetDamageValue(float value)
+    void IDamageSource.SetDamageValue(float value)
     {
         damage = value;
     }
