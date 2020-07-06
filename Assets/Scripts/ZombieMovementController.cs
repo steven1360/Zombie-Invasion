@@ -9,11 +9,13 @@ public class ZombieMovementController : MonoBehaviour
     [SerializeField] private Transform player;
     [SerializeField] private ZombieStatManager statController;
     private Rigidbody2D rb;
+    private Animator anim;
 
     // Start is called before the first frame update
     void Start()
     {
         rb = transform.root.GetComponent<Rigidbody2D>();
+        anim = transform.root.GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -30,6 +32,7 @@ public class ZombieMovementController : MonoBehaviour
         if (farEnoughAwayFromPlayer)
         {
             rb.MovePosition(transform.root.position + (Vector3)zombieToPlayer * statController.Stats.Speed * Time.deltaTime);
+            anim.SetBool("Moving", true);
         }
 
         
