@@ -7,7 +7,7 @@ public class Node
     public bool walkable;
     public Vector2 worldPosition;
     public Node parent;
-    public int f, g, h;
+    public float f, g, h;
 
     public Node(Vector2 worldPosition, bool walkable = true)
     {

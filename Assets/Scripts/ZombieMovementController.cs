@@ -18,7 +18,9 @@ public class ZombieMovementController : MonoBehaviour
     private Vector2 randomDestination;
     private Clock clock;
 
-
+    [SerializeField] Pathfinding pathfinding;
+    private List<Node> path;
+    private int currentNodeIndex;
 
     // Start is called before the first frame update
     void Start()
@@ -69,7 +71,12 @@ public class ZombieMovementController : MonoBehaviour
         {
             case WandererBehavior_SM.Start:
                 anim.SetBool("Moving", true);
-                randomDestination = GetRandomPosition();
+
+                do
+                {
+                    randomDestination = GetRandomPosition();
+                } while (!pathfinding.Grid[randomDestination].walkable);
+    
                 LookAt(randomDestination);
                 wanderer_state = WandererBehavior_SM.GoToRandomLocation;
                 break;
@@ -89,7 +96,12 @@ public class ZombieMovementController : MonoBehaviour
                 if (clock.ReachedDesiredWaitTime())
                 {
                     wanderer_state = WandererBehavior_SM.GoToRandomLocation;
-                    randomDestination = GetRandomPosition();
+
+                    do
+                    {
+                        randomDestination = GetRandomPosition();
+                    } while (!pathfinding.Grid[randomDestination].walkable);
+
                     LookAt(randomDestination);
                     clock.ResetClock();
                     anim.SetBool("Moving", true);
@@ -105,8 +117,32 @@ public class ZombieMovementController : MonoBehaviour
                 }
                 break;
             case WandererBehavior_SM.Chase:
-                if (!range.PlayerInRange) wanderer_state = WandererBehavior_SM.Wait;
-                ChasePlayer();
+                if (!range.PlayerInRange)
+                {
+                    wanderer_state = WandererBehavior_SM.Wait;
+                    anim.SetBool("Moving", false);
+                }
+
+                if (Vector2.Distance(player.position, transform.position) <= 2f)
+                {
+                    anim.SetBool("Moving", false);
+                    break;
+                }
+
+                path = pathfinding.AStarPath(transform.position, player.position);
+
+                if (Vector2.Distance(path[currentNodeIndex].worldPosition, transform.position) < 0.01f )
+                {
+                    currentNodeIndex++;
+                    if (currentNodeIndex == path.Count - 1)
+                    {
+                        currentNodeIndex = 0;
+                    }
+                }
+                Vector2 direction = (path[currentNodeIndex].worldPosition - (Vector2)transform.position).normalized;
+                LookAt(path[currentNodeIndex].worldPosition);
+                rb.MovePosition( (Vector2)transform.position + direction * statController.Stats.Speed * Time.fixedDeltaTime);
+
 
                 break;
         }

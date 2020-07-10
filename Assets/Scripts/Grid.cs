@@ -4,47 +4,26 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 
 
-public class Grid : MonoBehaviour
+public class Grid 
 {
     private Node[,] arr;
     private Vector2 origin;
     private int cellSize;
-    private int width;
-    private int height;
-    [SerializeField] private Tilemap tilemap;
-    List<Node> foo;
+    public int Width { get; private set; }
+    public int Height { get; private set; }
+    private Tilemap tilemap;
 
-
-    void OnDrawGizmos()
+    public Grid(Tilemap tilemap)
     {
-        for (int x = 0; x < arr.GetLength(0); x++)
-        {
-            for (int y = 0; y < arr.GetLength(1); y++)
-            {
-                if (arr[x,y].walkable)
-                {
-                    Gizmos.color = Color.red;
-                    Gizmos.DrawCube(arr[x, y].worldPosition, new Vector3(1, 1, 1) * 0.5f);
-                }
-                else
-                {
-                    Gizmos.color = Color.yellow;
-                    Gizmos.DrawCube(arr[x, y].worldPosition, new Vector3(1, 1, 1) * 0.5f);
-                }
-
-            }
-        }
-
-        foreach(Node node in foo)
-        {
-            Gizmos.color = Color.blue;
-            Gizmos.DrawCube(node.worldPosition, new Vector3(1, 1, 1) * 0.5f);
-        }
+        this.tilemap = tilemap;
+        cellSize = 2;
+        InitGrid();
+        MarkUnwalkableNodes();
     }
 
     public Node this[int x, int y] {
         get {
-            if (x >= 0 && y >= 0 && x < width && y < height)
+            if (x >= 0 && y >= 0 && x < Width && y < Height)
             {
                 return arr[x, y];
             }
@@ -52,13 +31,12 @@ public class Grid : MonoBehaviour
         }
 
         set {
-            if (x >= 0 && y >= 0 && x < width && y < height)
+            if (x >= 0 && y >= 0 && x < Width && y < Height)
             {
                 arr[x, y] = value;
             }
         }
     }
-
 
     public Node this[Vector3 position] {
         get {
@@ -72,27 +50,6 @@ public class Grid : MonoBehaviour
         }
     }
 
-
-    void Start()
-    {
-        cellSize = 1;
-        InitGrid();
-        MarkUnwalkableNodes();
-        //Debug.Log(GetGridCoordinates(new Vector2(2.5f, 2.5f)));
-        //Debug.Log(GetGridCoordinates(new Vector2(-4.5f, -9.5f)));
-        Testing();
-    }
-
-    void Testing()
-    {
-        foo = GetShortestPath(new Vector2(2.5f, 2.5f), new Vector2(-6.5f, -8.5f));
-        Debug.Log("Foo: " + foo);
-        foreach (Node node in foo)
-        {
-            Debug.Log(node.worldPosition);
-        }
-    }
-
     public Vector2Int GetGridCoordinates(Vector3 worldPosition)
     {
         int x = Mathf.RoundToInt((worldPosition.x - origin.x) / cellSize);
@@ -102,12 +59,19 @@ public class Grid : MonoBehaviour
 
     void InitGrid()
     {
-        width = tilemap.cellBounds.size.x;
-        height = tilemap.cellBounds.size.y;
-        arr = new Node[width, height];
-        origin.x = tilemap.origin.x + 0.5f;
-        origin.y = tilemap.origin.y + 0.5f;
+        Width = tilemap.cellBounds.size.x;
+        Height = tilemap.cellBounds.size.y;
+
+        Debug.Log("Width: " + Width);
+        Debug.Log("height: " + Height);
+        Debug.Log("origin: " + origin);
+
+        arr = new Node[Width, Height];
+        origin.x = (tilemap.origin.x * 2) + 1;
+        origin.y = (tilemap.origin.y * 2) + 1;
         arr[0, 0] = new Node(origin);
+
+        
 
         //fill bottom-most row
         for (int x = 1; x < arr.GetLength(0); x++)
@@ -157,8 +121,6 @@ public class Grid : MonoBehaviour
         }
     }
 
-
-
     public List<Node> GetShortestPath(Vector2 startPosition, Vector2 endPosition)
     {
         List<Node> openList = new List<Node>();
@@ -166,14 +128,24 @@ public class Grid : MonoBehaviour
         Node startNode = this[startPosition];
         Node endNode = this[endPosition];
 
-  
+        for (int x = 0; x < arr.GetLength(0); x++)
+        {
+
+            for (int y = 0; y < arr.GetLength(1); y++)
+            {
+                Node node = arr[x, y];
+                node.g = int.MaxValue;
+                node.f = node.g + node.h;
+                node.parent = null;
+            }
+        }
+
 
         startNode.g = 0;
         startNode.h = CalculateDistanceCost(startNode, endNode);
         startNode.f = startNode.g + startNode.h;
 
         openList.Add(startNode);
-
         while (openList.Count > 0)
         {
             Node currentNode = NodeWithLowestFScore(openList);
@@ -196,7 +168,7 @@ public class Grid : MonoBehaviour
                     continue;
                 }
 
-                int tentativeGCost = currentNode.g + CalculateDistanceCost(currentNode, neighbor);
+                float tentativeGCost = currentNode.g + CalculateDistanceCost(currentNode, neighbor);
                 if (tentativeGCost < neighbor.g)
                 {
                     neighbor.parent = currentNode;
@@ -228,6 +200,7 @@ public class Grid : MonoBehaviour
             current = current.parent;
         }
         path.Reverse();
+
         return path;
     }
 
@@ -237,24 +210,24 @@ public class Grid : MonoBehaviour
         List<Node> neighbors = new List<Node>();
 
         Node north = this[indices.x, indices.y + 1];
-        Node north_east = this[indices.x + 1, indices.y + 1];
-        Node north_west = this[indices.x - 1, indices.y + 1];
+       // Node north_east = this[indices.x + 1, indices.y + 1];
+       // Node north_west = this[indices.x - 1, indices.y + 1];
 
         Node south = this[indices.x, indices.y - 1];
-        Node south_east = this[indices.x + 1, indices.y - 1];
-        Node south_west = this[indices.x - 1, indices.y - 1];
+      //  Node south_east = this[indices.x + 1, indices.y - 1];
+       // Node south_west = this[indices.x - 1, indices.y - 1];
 
         Node west = this[indices.x - 1, indices.y];
         Node east = this[indices.x + 1, indices.y];
 
 
         neighbors.Add(north);
-        neighbors.Add(north_east);
-        neighbors.Add(north_west);
+        //neighbors.Add(north_east);
+        //neighbors.Add(north_west);
 
         neighbors.Add(south);
-        neighbors.Add(south_east);
-        neighbors.Add(south_west);
+       // neighbors.Add(south_east);
+        //neighbors.Add(south_west);
 
         neighbors.Add(west);
         neighbors.Add(east);
@@ -282,12 +255,13 @@ public class Grid : MonoBehaviour
         return lowestFnode;
     }
 
-    int CalculateDistanceCost(Node a, Node b)
+    float CalculateDistanceCost(Node a, Node b)
     {
-        int dx = Mathf.Abs(GetGridCoordinates(a.worldPosition).x - GetGridCoordinates(b.worldPosition).x);
-        int dy = Mathf.Abs(GetGridCoordinates(a.worldPosition).y - GetGridCoordinates(b.worldPosition).y);
-        int remaining = Mathf.Abs(dx - dy);
-        return 14 * Mathf.Min(dx, dy) + 10 * remaining;
+        // int dx = Mathf.Abs(GetGridCoordinates(a.worldPosition).x - GetGridCoordinates(b.worldPosition).x);
+        //int dy = Mathf.Abs(GetGridCoordinates(a.worldPosition).y - GetGridCoordinates(b.worldPosition).y);
+        //int remaining = Mathf.Abs(dx - dy);
+        // return 14 * Mathf.Min(dx, dy) + 10 * remaining;
+        return Mathf.Abs(a.worldPosition.x - b.worldPosition.x) + Mathf.Abs(a.worldPosition.y - b.worldPosition.y);
 
     }
 }
