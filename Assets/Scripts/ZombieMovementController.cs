@@ -23,6 +23,9 @@ public class ZombieMovementController : MonoBehaviour
     private int currentNodeIndex;
     private bool moveDiagonally;
 
+    private List<Node> wandererPath;
+    private bool wandering;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -76,16 +79,25 @@ public class ZombieMovementController : MonoBehaviour
                 wanderer_state = WandererBehavior_SM.GoToRandomLocation;
                 break;
             case WandererBehavior_SM.GoToRandomLocation:
-                bool arrivedAtTarget = MoveToLocation(randomDestination);
+                if (!wandering)
+                {
+                    wandering = true;
+                    wandererPath = pathfinding.AStarPath(transform.position, randomDestination, true);
+                }
+
+                bool arrivedAtTarget = WanderAlongPath();
 
                 if (arrivedAtTarget)
                 {
                     wanderer_state = WandererBehavior_SM.Wait;
                     anim.SetBool("Moving", false);
+                    wandering = false;
                 }
                 if (range.PlayerInRange)
                 {
                     wanderer_state = WandererBehavior_SM.Chase;
+                    wandering = false;
+                    currentNodeIndex = 0;
                 }
                 break;
             case WandererBehavior_SM.Wait:
@@ -94,8 +106,6 @@ public class ZombieMovementController : MonoBehaviour
                     wanderer_state = WandererBehavior_SM.GoToRandomLocation;
 
                     randomDestination = GetRandomWalkablePosition();
-
-
                     LookAt(randomDestination);
                     clock.ResetClock();
                     anim.SetBool("Moving", true);
@@ -160,6 +170,31 @@ public class ZombieMovementController : MonoBehaviour
         return false;
     }
 
+    bool WanderAlongPath()
+    {
+        if (wandererPath.Count == 1)
+        {
+            currentNodeIndex = 0;
+            return true;
+        }
+
+        if (Vector2.Distance(wandererPath[currentNodeIndex].worldPosition, transform.position) <= 0.1f)
+        {
+            currentNodeIndex++;
+            if (currentNodeIndex == wandererPath.Count - 1)
+            {
+                currentNodeIndex = 0;
+                return true;
+            }
+        }
+
+        anim.SetBool("Moving", true);
+        Vector2 direction = (wandererPath[currentNodeIndex].worldPosition - (Vector2)transform.position).normalized;
+        LookAt(wandererPath[currentNodeIndex].worldPosition);
+        rb.MovePosition((Vector2)transform.position + direction * statController.Stats.Speed * Time.fixedDeltaTime);
+        return false;
+    }
+
     private void ChasePlayer()
     {
         float dy = Mathf.Abs(player.position.y - transform.position.y);
@@ -203,10 +238,18 @@ public class ZombieMovementController : MonoBehaviour
 
         do
         {
-            dx = Random.Range(-4f, 4f);
-            dy = Random.Range(-4f, 4f);
+            dx = Random.Range(-6f, 6f);
+            dy = Random.Range(-6f, 6f);
+            while (dx >= -1 && dx <= 1)
+            {
+                dx = Random.Range(-6f, 6f);
+            }
+            while (dy >= -1 && dy <= 1)
+            {
+                dy = Random.Range(-6f, 6f);
+            }
             randomPosition = new Vector2(transform.position.x + dx, transform.position.y + dy);
-        } while ( pathfinding.Grid[randomPosition] != null && (!pathfinding.Grid[randomPosition].walkable));
+        } while ( pathfinding.Grid[randomPosition] == null || (!pathfinding.Grid[randomPosition].walkable));
 
         return randomPosition;
     }

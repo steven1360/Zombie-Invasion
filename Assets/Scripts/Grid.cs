@@ -124,7 +124,7 @@ public class Grid
     public List<Node> GetShortestPath(Vector2 startPosition, Vector2 endPosition, bool diagonalMovementAllowed)
     {
         List<Node> openList = new List<Node>();
-        List<Node> closedList = new List<Node>();
+        HashSet<Node> closedList = new HashSet<Node>();
         Node startNode = this[startPosition];
         Node endNode = this[endPosition];
 
