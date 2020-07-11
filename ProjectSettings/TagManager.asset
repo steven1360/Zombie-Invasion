@@ -16,8 +16,8 @@ TagManager:
   - 
   - DamageSource
   - Damageable
-  - 
-  - 
+  - Zombie
+  - Tilemap
   - 
   - 
   - 

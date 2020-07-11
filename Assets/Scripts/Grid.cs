@@ -121,7 +121,7 @@ public class Grid
         }
     }
 
-    public List<Node> GetShortestPath(Vector2 startPosition, Vector2 endPosition)
+    public List<Node> GetShortestPath(Vector2 startPosition, Vector2 endPosition, bool diagonalMovementAllowed)
     {
         List<Node> openList = new List<Node>();
         List<Node> closedList = new List<Node>();
@@ -157,7 +157,7 @@ public class Grid
                 return CalculatePath(endNode);
             }
 
-            List<Node> neighbors = GetNeighbors(currentNode.worldPosition);
+            List<Node> neighbors = GetNeighbors(currentNode.worldPosition , diagonalMovementAllowed);
             foreach(Node neighbor in neighbors)
             {
                 if (closedList.Contains(neighbor)) continue;
@@ -204,34 +204,33 @@ public class Grid
         return path;
     }
 
-    List<Node> GetNeighbors(Vector3 position)
+    List<Node> GetNeighbors(Vector3 position, bool diagonalMovementAllowed)
     {
         Vector2Int indices = GetGridCoordinates(position);
         List<Node> neighbors = new List<Node>();
 
         Node north = this[indices.x, indices.y + 1];
-       // Node north_east = this[indices.x + 1, indices.y + 1];
-       // Node north_west = this[indices.x - 1, indices.y + 1];
-
         Node south = this[indices.x, indices.y - 1];
-      //  Node south_east = this[indices.x + 1, indices.y - 1];
-       // Node south_west = this[indices.x - 1, indices.y - 1];
-
         Node west = this[indices.x - 1, indices.y];
         Node east = this[indices.x + 1, indices.y];
+        Node north_east = this[indices.x + 1, indices.y + 1];
+        Node north_west = this[indices.x - 1, indices.y + 1];
+        Node south_east = this[indices.x + 1, indices.y - 1];
+        Node south_west = this[indices.x - 1, indices.y - 1];
+
+        if (diagonalMovementAllowed)
+        {
+            neighbors.Add(north_east);
+            neighbors.Add(north_west);
+            neighbors.Add(south_east);
+            neighbors.Add(south_west);
+        }
 
 
         neighbors.Add(north);
-        //neighbors.Add(north_east);
-        //neighbors.Add(north_west);
-
         neighbors.Add(south);
-       // neighbors.Add(south_east);
-        //neighbors.Add(south_west);
-
         neighbors.Add(west);
         neighbors.Add(east);
-
         neighbors.RemoveAll(item => item == null);
 
 
@@ -257,10 +256,10 @@ public class Grid
 
     float CalculateDistanceCost(Node a, Node b)
     {
-        // int dx = Mathf.Abs(GetGridCoordinates(a.worldPosition).x - GetGridCoordinates(b.worldPosition).x);
-        //int dy = Mathf.Abs(GetGridCoordinates(a.worldPosition).y - GetGridCoordinates(b.worldPosition).y);
-        //int remaining = Mathf.Abs(dx - dy);
-        // return 14 * Mathf.Min(dx, dy) + 10 * remaining;
+       //  int dx = Mathf.Abs(GetGridCoordinates(a.worldPosition).x - GetGridCoordinates(b.worldPosition).x);
+       // int dy = Mathf.Abs(GetGridCoordinates(a.worldPosition).y - GetGridCoordinates(b.worldPosition).y);
+      //  int remaining = Mathf.Abs(dx - dy);
+         //return 14 * Mathf.Min(dx, dy) + 10 * remaining;
         return Mathf.Abs(a.worldPosition.x - b.worldPosition.x) + Mathf.Abs(a.worldPosition.y - b.worldPosition.y);
 
     }

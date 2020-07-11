@@ -21,6 +21,7 @@ public class ZombieMovementController : MonoBehaviour
     [SerializeField] Pathfinding pathfinding;
     private List<Node> path;
     private int currentNodeIndex;
+    private bool moveDiagonally;
 
     // Start is called before the first frame update
     void Start()
@@ -64,24 +65,19 @@ public class ZombieMovementController : MonoBehaviour
     }
 
 
-
     void Tick_WandererSM()
     {
         switch (wanderer_state)
         {
             case WandererBehavior_SM.Start:
                 anim.SetBool("Moving", true);
-
-                do
-                {
-                    randomDestination = GetRandomPosition();
-                } while (!pathfinding.Grid[randomDestination].walkable);
-    
+                randomDestination = GetRandomWalkablePosition();
                 LookAt(randomDestination);
                 wanderer_state = WandererBehavior_SM.GoToRandomLocation;
                 break;
             case WandererBehavior_SM.GoToRandomLocation:
-                bool arrivedAtTarget = GoToTarget(randomDestination, 0.1f);
+                bool arrivedAtTarget = MoveToLocation(randomDestination);
+
                 if (arrivedAtTarget)
                 {
                     wanderer_state = WandererBehavior_SM.Wait;
@@ -97,10 +93,8 @@ public class ZombieMovementController : MonoBehaviour
                 {
                     wanderer_state = WandererBehavior_SM.GoToRandomLocation;
 
-                    do
-                    {
-                        randomDestination = GetRandomPosition();
-                    } while (!pathfinding.Grid[randomDestination].walkable);
+                    randomDestination = GetRandomWalkablePosition();
+
 
                     LookAt(randomDestination);
                     clock.ResetClock();
@@ -122,30 +116,48 @@ public class ZombieMovementController : MonoBehaviour
                     wanderer_state = WandererBehavior_SM.Wait;
                     anim.SetBool("Moving", false);
                 }
-
-                if (Vector2.Distance(player.position, transform.position) <= 2f)
+                else
                 {
-                    anim.SetBool("Moving", false);
-                    break;
+                    MoveToLocation(player.position);
                 }
-
-                path = pathfinding.AStarPath(transform.position, player.position);
-
-                if (Vector2.Distance(path[currentNodeIndex].worldPosition, transform.position) < 0.01f )
-                {
-                    currentNodeIndex++;
-                    if (currentNodeIndex == path.Count - 1)
-                    {
-                        currentNodeIndex = 0;
-                    }
-                }
-                Vector2 direction = (path[currentNodeIndex].worldPosition - (Vector2)transform.position).normalized;
-                LookAt(path[currentNodeIndex].worldPosition);
-                rb.MovePosition( (Vector2)transform.position + direction * statController.Stats.Speed * Time.fixedDeltaTime);
-
 
                 break;
         }
+    }
+
+    bool MoveToLocation(Vector2 location)
+    {
+        path = pathfinding.AStarPath(transform.position, location, true);
+        if (path.Count == 1)
+        {
+            currentNodeIndex = 0;
+            return true;
+        }
+
+        if (range.PlayerInRange && Vector2.Distance(player.position, transform.position) <= 4f)
+        {
+            if (range.PlayerInRange && Vector2.Distance(player.position, transform.position) <= 1.5f)
+            {
+                anim.SetBool("Moving", false);
+                return true;
+            }
+        }
+
+        if (Vector2.Distance(path[currentNodeIndex].worldPosition, transform.position) <= Time.fixedDeltaTime)
+        {
+            currentNodeIndex++;
+            if (currentNodeIndex == path.Count - 1)
+            {
+                currentNodeIndex = 0;
+                return true;
+            }
+        }
+
+        anim.SetBool("Moving", true);
+        Vector2 direction = (path[currentNodeIndex].worldPosition - (Vector2)transform.position).normalized;
+        LookAt(path[currentNodeIndex].worldPosition);
+        rb.MovePosition((Vector2)transform.position + direction * statController.Stats.Speed * Time.fixedDeltaTime);
+        return false;
     }
 
     private void ChasePlayer()
@@ -183,11 +195,20 @@ public class ZombieMovementController : MonoBehaviour
 
     }
 
-    Vector2 GetRandomPosition()
+    Vector2 GetRandomWalkablePosition()
     {
-        float dx = Random.Range(-4f, 4f);
-        float dy = Random.Range(-4f, 4f);
-        return new Vector2(transform.position.x + dx, transform.position.y + dy);
+        float dx;
+        float dy;
+        Vector2 randomPosition;
+
+        do
+        {
+            dx = Random.Range(-4f, 4f);
+            dy = Random.Range(-4f, 4f);
+            randomPosition = new Vector2(transform.position.x + dx, transform.position.y + dy);
+        } while ( pathfinding.Grid[randomPosition] != null && (!pathfinding.Grid[randomPosition].walkable));
+
+        return randomPosition;
     }
 
 }

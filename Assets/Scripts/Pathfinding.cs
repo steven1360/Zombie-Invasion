@@ -44,10 +44,11 @@ public class Pathfinding : MonoBehaviour
         }
     }
 
-   public List<Node> AStarPath(Vector3 start, Vector3 end) 
+   public List<Node> AStarPath(Vector3 start, Vector3 end, bool moveDiagonally) 
    {
-        path = Grid.GetShortestPath(start, end);
+        path = Grid.GetShortestPath(start, end, moveDiagonally);
         return path;
    }
+
 
 }
