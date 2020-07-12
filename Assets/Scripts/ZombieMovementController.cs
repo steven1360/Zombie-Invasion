@@ -11,6 +11,7 @@ public class ZombieMovementController : MonoBehaviour
 {
     [SerializeField] private Transform player;
     [SerializeField] private ZombieStatManager statController;
+    [SerializeField] Path path;
     private Rigidbody2D rb;
     private Animator anim;
     private ZombieVisionRange range;
@@ -18,23 +19,19 @@ public class ZombieMovementController : MonoBehaviour
     private Vector2 randomDestination;
     private Clock clock;
 
-    [SerializeField] Pathfinding pathfinding;
-    private List<Node> path;
-    private int currentNodeIndex;
-    private bool moveDiagonally;
 
-    private List<Node> wandererPath;
-    private bool wandering;
+
+
 
     // Start is called before the first frame update
     void Start()
     {
-        Random.InitState(System.DateTime.Now.Millisecond);
         rb = transform.root.GetComponent<Rigidbody2D>();
         anim = transform.root.GetComponent<Animator>();
         range = transform.GetChild(0).GetComponent<ZombieVisionRange>();
         clock = new Clock(3.5f, 0f);
     }
+
 
 
     void FixedUpdate()
@@ -70,45 +67,35 @@ public class ZombieMovementController : MonoBehaviour
 
     void Tick_WandererSM()
     {
+        Debug.Log(wanderer_state);
+
+        //transitions
         switch (wanderer_state)
         {
             case WandererBehavior_SM.Start:
-                anim.SetBool("Moving", true);
-                randomDestination = GetRandomWalkablePosition();
+
+                randomDestination = path.GetRandomWalkablePosition();
                 LookAt(randomDestination);
+                path.ComputeAStarPath(transform.position, randomDestination);
                 wanderer_state = WandererBehavior_SM.GoToRandomLocation;
                 break;
             case WandererBehavior_SM.GoToRandomLocation:
-                if (!wandering)
-                {
-                    wandering = true;
-                    wandererPath = pathfinding.AStarPath(transform.position, randomDestination, true);
-                }
 
-                bool arrivedAtTarget = WanderAlongPath();
-
-                if (arrivedAtTarget)
-                {
-                    wanderer_state = WandererBehavior_SM.Wait;
-                    anim.SetBool("Moving", false);
-                    wandering = false;
-                }
-                if (range.PlayerInRange)
-                {
-                    wanderer_state = WandererBehavior_SM.Chase;
-                    wandering = false;
-                    currentNodeIndex = 0;
-                }
+                bool arrivedAtTarget = path.MoveRigidbodyAlongPath(rb, statController.Stats.Speed);
+                wanderer_state = (arrivedAtTarget) ? WandererBehavior_SM.Wait : wanderer_state;
+                wanderer_state = (range.PlayerInRange) ? WandererBehavior_SM.Chase : wanderer_state;
                 break;
+
             case WandererBehavior_SM.Wait:
+
                 if (clock.ReachedDesiredWaitTime())
                 {
                     wanderer_state = WandererBehavior_SM.GoToRandomLocation;
 
-                    randomDestination = GetRandomWalkablePosition();
+                    randomDestination = path.GetRandomWalkablePosition();
                     LookAt(randomDestination);
                     clock.ResetClock();
-                    anim.SetBool("Moving", true);
+                    path.ComputeAStarPath(transform.position, randomDestination);
                 }
                 else
                 {
@@ -124,134 +111,48 @@ public class ZombieMovementController : MonoBehaviour
                 if (!range.PlayerInRange)
                 {
                     wanderer_state = WandererBehavior_SM.Wait;
-                    anim.SetBool("Moving", false);
                 }
                 else
                 {
-                    MoveToLocation(player.position);
+                    LookAt(player.position);
+                    GoToTarget(player.position, 2);
                 }
 
                 break;
         }
-    }
 
-    bool MoveToLocation(Vector2 location)
-    {
-        path = pathfinding.AStarPath(transform.position, location, true);
-        if (path.Count == 1)
+        //outputs
+        switch (wanderer_state)
         {
-            currentNodeIndex = 0;
-            return true;
-        }
+            case WandererBehavior_SM.Start:
 
-        if (range.PlayerInRange && Vector2.Distance(player.position, transform.position) <= 4f)
-        {
-            if (range.PlayerInRange && Vector2.Distance(player.position, transform.position) <= 1.5f)
-            {
+                break;
+            case WandererBehavior_SM.GoToRandomLocation:
+                anim.SetBool("Moving", true);
+                break;
+            case WandererBehavior_SM.Wait:
                 anim.SetBool("Moving", false);
-                return true;
-            }
+                break;
+            case WandererBehavior_SM.Chase:
+                anim.SetBool("Moving", true);
+                break;
         }
 
-        if (Vector2.Distance(path[currentNodeIndex].worldPosition, transform.position) <= Time.fixedDeltaTime)
+        void GoToTarget(Vector3 target, float stoppingDistance)
         {
-            currentNodeIndex++;
-            if (currentNodeIndex == path.Count - 1)
+            float dy = Mathf.Abs(target.y - transform.position.y);
+            float dx = Mathf.Abs(target.x - transform.position.x);
+            bool farFromplayer = Mathf.Pow(dx, 2) + Mathf.Pow(dy, 2) > Mathf.Pow(stoppingDistance, 2);
+            Vector2 zombieToTarget = (target - transform.position).normalized;
+
+            if (farFromplayer && range.PlayerInRange)
             {
-                currentNodeIndex = 0;
-                return true;
+                LookAt(target);
+                rb.MovePosition(transform.root.position + (Vector3)zombieToTarget * statController.Stats.Speed * Time.fixedDeltaTime);
             }
+
+
         }
-
-        anim.SetBool("Moving", true);
-        Vector2 direction = (path[currentNodeIndex].worldPosition - (Vector2)transform.position).normalized;
-        LookAt(path[currentNodeIndex].worldPosition);
-        rb.MovePosition((Vector2)transform.position + direction * statController.Stats.Speed * Time.fixedDeltaTime);
-        return false;
-    }
-
-    bool WanderAlongPath()
-    {
-        if (wandererPath.Count == 1)
-        {
-            currentNodeIndex = 0;
-            return true;
-        }
-
-        if (Vector2.Distance(wandererPath[currentNodeIndex].worldPosition, transform.position) <= 0.1f)
-        {
-            currentNodeIndex++;
-            if (currentNodeIndex == wandererPath.Count - 1)
-            {
-                currentNodeIndex = 0;
-                return true;
-            }
-        }
-
-        anim.SetBool("Moving", true);
-        Vector2 direction = (wandererPath[currentNodeIndex].worldPosition - (Vector2)transform.position).normalized;
-        LookAt(wandererPath[currentNodeIndex].worldPosition);
-        rb.MovePosition((Vector2)transform.position + direction * statController.Stats.Speed * Time.fixedDeltaTime);
-        return false;
-    }
-
-    private void ChasePlayer()
-    {
-        float dy = Mathf.Abs(player.position.y - transform.position.y);
-        float dx = Mathf.Abs(player.position.x - transform.position.x);
-        bool farEnoughAwayFromPlayer = Mathf.Pow(dx, 2) + Mathf.Pow(dy, 2) > 3.9f;
-        Vector2 zombieToPlayer = (player.position - transform.position).normalized;
-
-        if (farEnoughAwayFromPlayer && range.PlayerInRange)
-        {
-            rb.MovePosition(transform.root.position + (Vector3)zombieToPlayer * statController.Stats.Speed * Time.deltaTime);
-            LookAt(player.position);
-            anim.SetBool("Moving", true);
-        }
-        else
-        {
-            anim.SetBool("Moving", false);
-        }
-    }
-
-    bool GoToTarget(Vector3 target, float stoppingDistance)
-    {
-        float dy = Mathf.Abs(target.y - transform.position.y);
-        float dx = Mathf.Abs(target.x - transform.position.x);
-        Vector2 direction = (target - transform.position).normalized;
-        bool notWithinStoppingDistance = Mathf.Pow(dx, 2) + Mathf.Pow(dy, 2) >= Mathf.Pow(stoppingDistance, 2);
-        //Debug.Log("distance :" + Mathf.Pow(dx, 2) + Mathf.Pow(dy, 2));
-        if (notWithinStoppingDistance)
-        {
-            rb.MovePosition(transform.root.position + (Vector3)direction * statController.Stats.Speed * Time.deltaTime);
-            return false;
-        }
-        return true;
-
-    }
-
-    Vector2 GetRandomWalkablePosition()
-    {
-        float dx;
-        float dy;
-        Vector2 randomPosition;
-
-        do
-        {
-            dx = Random.Range(-6f, 6f);
-            dy = Random.Range(-6f, 6f);
-            while (dx >= -1 && dx <= 1)
-            {
-                dx = Random.Range(-6f, 6f);
-            }
-            while (dy >= -1 && dy <= 1)
-            {
-                dy = Random.Range(-6f, 6f);
-            }
-            randomPosition = new Vector2(transform.position.x + dx, transform.position.y + dy);
-        } while ( pathfinding.Grid[randomPosition] == null || (!pathfinding.Grid[randomPosition].walkable));
-
-        return randomPosition;
     }
 
 }

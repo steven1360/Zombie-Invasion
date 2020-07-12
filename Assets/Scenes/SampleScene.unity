@@ -167,7 +167,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 1760964924}
   statController: {fileID: 945879887}
-  pathfinding: {fileID: 464631401}
+  path: {fileID: 0}
 --- !u!1 &76645205
 GameObject:
   m_ObjectHideFlags: 0
@@ -1702,7 +1702,7 @@ GameObject:
   - component: {fileID: 464631402}
   - component: {fileID: 464631401}
   m_Layer: 0
-  m_Name: Pathfinding
+  m_Name: Path
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1717,11 +1717,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 464631400}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b258d3e585421424cb3e1db01d5bb36b, type: 3}
+  m_Script: {fileID: 11500000, guid: e215d8a910667db458b2a0023f0b42af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   tilemap: {fileID: 183365872}
-  CurrentPathIndex: 0
 --- !u!4 &464631402
 Transform:
   m_ObjectHideFlags: 0
@@ -2317,7 +2316,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!50 &953385503
 Rigidbody2D:
   serializedVersion: 4
@@ -2460,7 +2459,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!50 &1040278537
 Rigidbody2D:
   serializedVersion: 4
@@ -2857,7 +2856,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 1760964924}
   statController: {fileID: 1850694433}
-  pathfinding: {fileID: 464631401}
+  path: {fileID: 0}
 --- !u!1 &1255352293
 GameObject:
   m_ObjectHideFlags: 0
@@ -3102,7 +3101,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!50 &1399940931
 Rigidbody2D:
   serializedVersion: 4
@@ -3650,7 +3649,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 1760964924}
   statController: {fileID: 1956394438}
-  pathfinding: {fileID: 464631401}
+  path: {fileID: 0}
 --- !u!1 &1629792202
 GameObject:
   m_ObjectHideFlags: 0
@@ -3697,7 +3696,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 1760964924}
   statController: {fileID: 1785160958}
-  pathfinding: {fileID: 464631401}
+  path: {fileID: 0}
 --- !u!1 &1671970101
 GameObject:
   m_ObjectHideFlags: 0
@@ -4025,7 +4024,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 1760964924}
   statController: {fileID: 107747044}
-  pathfinding: {fileID: 464631401}
+  path: {fileID: 0}
 --- !u!1 &1760964923
 GameObject:
   m_ObjectHideFlags: 0
@@ -12667,7 +12666,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!50 &2056484474
 Rigidbody2D:
   serializedVersion: 4
@@ -12810,7 +12809,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!50 &2090545483
 Rigidbody2D:
   serializedVersion: 4
@@ -13040,4 +13039,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 1760964924}
   statController: {fileID: 1228553585}
-  pathfinding: {fileID: 464631401}
+  path: {fileID: 464631401}

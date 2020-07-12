@@ -121,7 +121,7 @@ public class Grid
         }
     }
 
-    public List<Node> GetShortestPath(Vector2 startPosition, Vector2 endPosition, bool diagonalMovementAllowed)
+    public List<Node> GetShortestPath(Vector2 startPosition, Vector2 endPosition)
     {
         List<Node> openList = new List<Node>();
         HashSet<Node> closedList = new HashSet<Node>();
@@ -157,7 +157,7 @@ public class Grid
                 return CalculatePath(endNode);
             }
 
-            List<Node> neighbors = GetNeighbors(currentNode.worldPosition , diagonalMovementAllowed);
+            List<Node> neighbors = GetNeighbors(currentNode.worldPosition);
             foreach(Node neighbor in neighbors)
             {
                 if (closedList.Contains(neighbor)) continue;
@@ -204,33 +204,21 @@ public class Grid
         return path;
     }
 
-    List<Node> GetNeighbors(Vector3 position, bool diagonalMovementAllowed)
+    List<Node> GetNeighbors(Vector3 position)
     {
         Vector2Int indices = GetGridCoordinates(position);
         List<Node> neighbors = new List<Node>();
 
-        Node north = this[indices.x, indices.y + 1];
-        Node south = this[indices.x, indices.y - 1];
-        Node west = this[indices.x - 1, indices.y];
-        Node east = this[indices.x + 1, indices.y];
-        Node north_east = this[indices.x + 1, indices.y + 1];
-        Node north_west = this[indices.x - 1, indices.y + 1];
-        Node south_east = this[indices.x + 1, indices.y - 1];
-        Node south_west = this[indices.x - 1, indices.y - 1];
+        Node top = this[indices.x, indices.y + 1];
+        Node bottom = this[indices.x, indices.y - 1];
+        Node left = this[indices.x - 1, indices.y];
+        Node right = this[indices.x + 1, indices.y];
 
-        if (diagonalMovementAllowed)
-        {
-            neighbors.Add(north_east);
-            neighbors.Add(north_west);
-            neighbors.Add(south_east);
-            neighbors.Add(south_west);
-        }
+        neighbors.Add(top);
+        neighbors.Add(bottom);
+        neighbors.Add(left);
+        neighbors.Add(right);
 
-
-        neighbors.Add(north);
-        neighbors.Add(south);
-        neighbors.Add(west);
-        neighbors.Add(east);
         neighbors.RemoveAll(item => item == null);
 
 
