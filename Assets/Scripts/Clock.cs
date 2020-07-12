@@ -11,7 +11,6 @@ public class Clock
     {
         this.DesiredWaitTime = DesiredWaitTime;
         this.TimeElapsed = TimeElapsed;
-        Random.InitState(System.DateTime.Now.Millisecond);
     }
 
     public void Tick(float dt)
@@ -30,7 +29,6 @@ public class Clock
 
     public void ResetClock()
     {
-        SetRandomWaitTime(1.35f, 3.4f);
         TimeElapsed = 0;
     }
 

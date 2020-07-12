@@ -6,6 +6,7 @@ public class KnifeAttack : MonoBehaviour
 {
     [SerializeField] private Knife knife;
     [SerializeField] private PlayerMovementController movementController;
+    [SerializeField] private AudioManager aud;
     private Animator anim;
     private bool attacking;
 
@@ -37,6 +38,7 @@ public class KnifeAttack : MonoBehaviour
         if (keycodePresseDown && !knife.AttackInTimeout && !attacking)
         {
             attacking = true;
+            aud.PlayClip("knife");
             anim.SetTrigger("AttackBtnPressed");
             StartCoroutine(Attack(0.1666667f));
         }
