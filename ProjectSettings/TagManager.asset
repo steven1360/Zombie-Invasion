@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - Zombie
+  - Tilemap
   layers:
   - Default
   - TransparentFX
@@ -18,8 +19,8 @@ TagManager:
   - Damageable
   - Zombie
   - Tilemap
-  - 
-  - 
+  - Player
+  - ZombieFOV
   - 
   - 
   - 
