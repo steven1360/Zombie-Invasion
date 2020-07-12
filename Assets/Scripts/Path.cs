@@ -10,7 +10,7 @@ public class Path : MonoBehaviour
     private int index;
     public Grid grid;
 
-    void Start()
+    void Awake()
     {
         Random.InitState(System.DateTime.Now.Millisecond);
         grid = new Grid(tilemap);
@@ -18,11 +18,8 @@ public class Path : MonoBehaviour
         index = 0;
     }
 
-    public delegate void OnTrue();
-    public delegate void OnFalse();
-
     void OnDrawGizmos()
-    {
+    {/*
         for (int x = 0; x < grid.Width; x++)
         {
 
@@ -45,7 +42,7 @@ public class Path : MonoBehaviour
         {
             Gizmos.color = Color.blue;
             Gizmos.DrawCube(node.worldPosition, new Vector3(1, 1, 1) * 0.5f);
-        }
+        }*/
     }
 
     public void ComputeAStarPath(Vector3 start, Vector3 end) 

@@ -62,9 +62,9 @@ public class Grid
         Width = tilemap.cellBounds.size.x;
         Height = tilemap.cellBounds.size.y;
 
-        Debug.Log("Width: " + Width);
-        Debug.Log("height: " + Height);
-        Debug.Log("origin: " + origin);
+        //Debug.Log("Width: " + Width);
+       // Debug.Log("height: " + Height);
+       // Debug.Log("origin: " + origin);
 
         arr = new Node[Width, Height];
         origin.x = (tilemap.origin.x * 2) + 1;

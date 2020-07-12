@@ -76,11 +76,11 @@ public class CameraController : MonoBehaviour
 
     Vector3 MoveTowardsAlongX(Vector3 current, Vector3 target)
     {
-        return Vector3.MoveTowards(current, new Vector3(target.x, current.y, current.z), velocity.x * Time.maximumDeltaTime);
+        return Vector3.MoveTowards(current, new Vector3(target.x, current.y, current.z), velocity.x * Time.deltaTime);
     }
 
     Vector3 MoveTowardsAlongY(Vector3 current, Vector3 target)
     {
-        return Vector3.MoveTowards(current, new Vector3(current.x, target.y, current.z), velocity.y * Time.maximumDeltaTime);
+        return Vector3.MoveTowards(current, new Vector3(current.x, target.y, current.z), velocity.y * Time.deltaTime);
     }
 }

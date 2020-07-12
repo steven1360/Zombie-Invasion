@@ -22,14 +22,17 @@ public class ZombieMovementController : MonoBehaviour
 
 
 
-
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         rb = transform.root.GetComponent<Rigidbody2D>();
         anim = transform.root.GetComponent<Animator>();
         fov = transform.GetChild(0).GetComponent<ZombieFOV>();
         clock = new Clock(3.5f, 0f);
+        path = Instantiate(path);
+        path.gameObject.SetActive(true);
+        path.GetComponent<Transform>().parent = transform;
+        clock.SetRandomWaitTime(1.35f, 3.4f);
     }
 
 
@@ -68,7 +71,7 @@ public class ZombieMovementController : MonoBehaviour
     void Tick_WandererSM()
     {
         Debug.Log(wanderer_state);
-
+        Debug.Log("fov: " + fov.PlayerInRange);
         //transitions
         switch (wanderer_state)
         {
@@ -157,7 +160,7 @@ public class ZombieMovementController : MonoBehaviour
             if (farFromplayer && fov.PlayerInRange)
             {
                 LookAt(target);
-                rb.MovePosition(transform.root.position + (Vector3)zombieToTarget * statController.Stats.Speed * Time.fixedDeltaTime);
+                rb.MovePosition(transform.root.position + (Vector3)zombieToTarget * statController.Stats.Speed * Time.fixedDeltaTime * Random.Range(1.3f, 2.9f));
             }
 
 

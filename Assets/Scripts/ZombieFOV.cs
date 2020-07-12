@@ -6,35 +6,23 @@ public class ZombieFOV : MonoBehaviour
 {
     public bool PlayerInRange { get; private set; }
     public Vector2 playerLastSeen { get; private set; }
-    private bool PlayerInCollider;
     [SerializeField] private Transform player;
 
-    void Start()
-    {
-        PlayerInCollider = false;
-    }
 
-    void Update()
+    void OnTriggerStay2D(Collider2D col)
     {
         Vector2 direction = (player.position - transform.position).normalized;
         LayerMask mask = LayerMask.GetMask("Tilemap", "Player");
         RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, Mathf.Infinity, mask);
 
-        if (PlayerInCollider && hit.collider.tag == "Player")
+        if (col.tag == "Player" && hit.collider.tag == "Player")
         {
             PlayerInRange = true;
         }
-        else if (!PlayerInCollider)
+        else 
         {
             PlayerInRange = false;
-        }
-    }
-
-    void OnTriggerEnter2D(Collider2D col)
-    {
-        if (col.tag == "Player" )
-        {
-            PlayerInCollider = true;
+            playerLastSeen = player.position;
         }
     }
 
@@ -43,8 +31,8 @@ public class ZombieFOV : MonoBehaviour
     {
         if (col.tag == "Player")
         {
-            PlayerInCollider = false;
             playerLastSeen = col.transform.position;
+            PlayerInRange = false;
         }
     }
 
