@@ -11042,4 +11042,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 1760964924}
   statController: {fileID: 1228553585}
+  damageable: {fileID: 1717870295}
   path: {fileID: 464631401}

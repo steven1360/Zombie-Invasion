@@ -11,6 +11,7 @@ public class ZombieMovementController : MonoBehaviour
 {
     [SerializeField] private Transform player;
     [SerializeField] private ZombieStatManager statController;
+    [SerializeField] private Damageable damageable;
     [SerializeField] Path path;
     private Rigidbody2D rb;
     private Animator anim;
@@ -19,7 +20,7 @@ public class ZombieMovementController : MonoBehaviour
     private Vector2 randomDestination;
     private Clock clock;
 
-
+    private bool damaged;
 
 
     // Start is called before the first frame update
@@ -33,6 +34,16 @@ public class ZombieMovementController : MonoBehaviour
         path.gameObject.SetActive(true);
         path.GetComponent<Transform>().parent = transform;
         clock.SetRandomWaitTime(1.35f, 3.4f);
+
+        damageable.OnDamageSourceTouched += () => wanderer_state = WandererBehavior_SM.Chase;
+    }
+
+    void Update()
+    {
+        if (damageable.TouchedByDamageSource)
+        {
+            Debug.Log("tru");
+        }
     }
 
 

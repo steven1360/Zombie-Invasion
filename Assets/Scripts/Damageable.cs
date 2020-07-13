@@ -8,20 +8,20 @@ public class Damageable : MonoBehaviour
     public bool TouchedByDamageSource { get; private set; }
     public float DamageValue { get; private set; }
 
+    public delegate void DSDel();
+    public event DSDel OnDamageSourceTouched;
+
     void Start()
     {
         TouchedByDamageSource = false;
         DamageValue = 0;
     }
 
-    void Update()
-    {
-
-    }
 
     public void RaiseFlag(float damageAmount, Vector2 knockbackForce )
     {
         TouchedByDamageSource = true;
+        OnDamageSourceTouched.Invoke();
         DamageValue = damageAmount;
         KnockbackEffect(knockbackForce);
     }
