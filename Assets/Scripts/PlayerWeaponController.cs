@@ -41,9 +41,13 @@ public class PlayerWeaponController : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            equippedWeapon = weaponsDict["Rifle"];
+            equippedWeapon = weaponsDict["Pistol"];
         }
         else if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            equippedWeapon = weaponsDict["Rifle"];
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha4))
         {
             equippedWeapon = weaponsDict["Shotgun"];
         }
