@@ -4,15 +4,17 @@ using UnityEngine;
 
 public class FirearmAttack : MonoBehaviour
 {
-    [SerializeField] private Firearm firearm;
-    [SerializeField] private float speed = 3f;
-    [SerializeField] private PlayerAimController aimController;
-    [SerializeField] private PlayerMovementController movementController;
-    [SerializeField] private AudioManager aud;
-    private Animator anim;
-    private Transform bullet;
-    private bool reloading;
-    private Transform muzzle_flash;
+    [SerializeField] protected Firearm firearm;
+    [SerializeField] protected float speed = 3f;
+    [SerializeField] protected PlayerAimController aimController;
+    [SerializeField] protected PlayerMovementController movementController;
+    [SerializeField] protected AudioManager aud;
+    [SerializeField] protected string attackAudioClipName;
+    [SerializeField] protected string reloadAudioClipName;
+    protected Animator anim;
+    protected Transform bullet;
+    protected bool reloading;
+    protected Transform muzzle_flash;
 
     void Start()
     {
@@ -43,7 +45,7 @@ public class FirearmAttack : MonoBehaviour
         Debug.Log($"Ammo: {firearm.CurrentMagazineCapacity}/{firearm.MaxMagazineCapacity}    Total: {firearm.TotalAmmo}");
     }
 
-    void DoAttackOnInput(bool keycodePressedDown)
+    virtual protected void DoAttackOnInput(bool keycodePressedDown)
     {
         bool needToReload = (firearm.CurrentMagazineCapacity == 0);
 
@@ -55,7 +57,7 @@ public class FirearmAttack : MonoBehaviour
             Rigidbody2D rb = bulletClone.GetComponent<Rigidbody2D>();
 
             anim.SetTrigger("Shoot");
-            aud.PlayClip("m4a1_singleshot");
+            aud.PlayClip(attackAudioClipName);
             muzzle_flash.gameObject.SetActive(true);
             firearm.AddToCurrentMagCapacity(-1);
             firearm.AttackTimeoutClock.ResetClock();
@@ -79,7 +81,7 @@ public class FirearmAttack : MonoBehaviour
         if (!reloading && keycodePressedDown && !magazineIsFull && !TotalMagIsEmpty)
         {
             anim.SetTrigger("Reload");
-            aud.PlayClip("m4a1_reload");
+            aud.PlayClip(reloadAudioClipName);
             StartCoroutine(ReloadWeaponOnInput(firearm.ReloadTimeInSeconds));
             reloading = true;
         }

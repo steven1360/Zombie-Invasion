@@ -15,6 +15,6 @@ MonoBehaviour:
   currentMagazineCapacity: 8
   maxMagazineCapacity: 8
   totalAmmo: 36
-  reloadTimeInSeconds: 1.35
-  fireRateInSeconds: 1
+  reloadTimeInSeconds: 1
+  fireRateInSeconds: 0.8
   damage: 35

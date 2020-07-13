@@ -9,7 +9,11 @@ public class AnimFrameHitbox : MonoBehaviour, IDamageSource
 
     void OnTriggerEnter2D(Collider2D col)
     {
-        col.gameObject.GetComponent<Damageable>().RaiseFlag(DamageValue, Vector2.zero);
+        Damageable damageable = col.gameObject.GetComponent<Damageable>();
+        if (damageable != null)
+        {
+            damageable.RaiseFlag(DamageValue, Vector2.zero); 
+        }
     }
 
     public void SetDamageValue(float value)
