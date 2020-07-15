@@ -42,7 +42,7 @@ public class FirearmAttack : MonoBehaviour
             anim.SetBool("moving", false);
         }
 
-        Debug.Log($"Ammo: {firearm.CurrentMagazineCapacity}/{firearm.MaxMagazineCapacity}    Total: {firearm.TotalAmmo}");
+        //Debug.Log($"Ammo: {firearm.CurrentMagazineCapacity}/{firearm.MaxMagazineCapacity}    Total: {firearm.TotalAmmo}");
     }
 
     virtual protected void DoAttackOnInput(bool keycodePressedDown)

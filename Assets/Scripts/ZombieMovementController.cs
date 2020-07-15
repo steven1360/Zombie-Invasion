@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-enum WandererBehavior_SM { Start, GoToRandomLocation, Wait, Chase, ExtendedChase}
+enum WandererBehavior_SM { Start, GoToRandomLocation, Wait, Chase, ExtendedChase }
 
 
 
@@ -20,8 +20,6 @@ public class ZombieMovementController : MonoBehaviour
     private Vector2 randomDestination;
     private Clock clock;
 
-    private bool damaged;
-
 
     // Start is called before the first frame update
     void Awake()
@@ -38,21 +36,13 @@ public class ZombieMovementController : MonoBehaviour
         damageable.OnDamageSourceTouched += () => wanderer_state = WandererBehavior_SM.Chase;
     }
 
-    void Update()
-    {
-        if (damageable.TouchedByDamageSource)
-        {
-            Debug.Log("tru");
-        }
-    }
-
 
 
     void FixedUpdate()
     {
         Tick_WandererSM();
     }
-    
+
     void LookAt(Vector2 targetToLookAt)
     {
         float dx = targetToLookAt.x - transform.position.x;
@@ -81,14 +71,12 @@ public class ZombieMovementController : MonoBehaviour
 
     void Tick_WandererSM()
     {
-        Debug.Log(wanderer_state);
-        Debug.Log("fov: " + fov.PlayerInRange);
         //transitions
         switch (wanderer_state)
         {
             case WandererBehavior_SM.Start:
 
-                randomDestination = path.GetRandomWalkablePosition();
+                randomDestination = path.GetRandomWalkablePosition(transform.position);
                 LookAt(randomDestination);
                 path.ComputeAStarPath(transform.position, randomDestination);
                 wanderer_state = WandererBehavior_SM.GoToRandomLocation;
@@ -106,7 +94,7 @@ public class ZombieMovementController : MonoBehaviour
                 {
                     wanderer_state = WandererBehavior_SM.GoToRandomLocation;
 
-                    randomDestination = path.GetRandomWalkablePosition();
+                    randomDestination = path.GetRandomWalkablePosition(transform.position);
                     LookAt(randomDestination);
                     clock.ResetClock();
                     path.ComputeAStarPath(transform.position, randomDestination);
@@ -171,7 +159,7 @@ public class ZombieMovementController : MonoBehaviour
             if (farFromplayer && fov.PlayerInRange)
             {
                 LookAt(target);
-                rb.MovePosition(transform.root.position + (Vector3)zombieToTarget * statController.Stats.Speed * Time.fixedDeltaTime * Random.Range(1.3f, 2.9f));
+                rb.MovePosition(transform.position + (Vector3)zombieToTarget * statController.Stats.Speed * Time.fixedDeltaTime * Random.Range(1.3f, 2.9f));
             }
 
 

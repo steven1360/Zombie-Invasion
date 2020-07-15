@@ -12,10 +12,10 @@ public class Path : MonoBehaviour
 
     void Awake()
     {
-        Random.InitState(System.DateTime.Now.Millisecond);
         grid = new Grid(tilemap);
         path = new List<Node>();
         index = 0;
+        gameObject.SetActive(false);
     }
 
     void OnDrawGizmos()
@@ -47,6 +47,17 @@ public class Path : MonoBehaviour
 
     public void ComputeAStarPath(Vector3 start, Vector3 end) 
     {
+        if (!grid[start].walkable)
+        {
+            List<Node> neighbors = grid.GetNeighbors(start);
+            foreach (Node neighbor in neighbors)
+            {
+                if (neighbor.walkable)
+                {
+                    start = neighbor.worldPosition;
+                }
+            }
+        }
         path = grid.GetShortestPath(start, end);
         index = 0;
     }
@@ -54,8 +65,8 @@ public class Path : MonoBehaviour
     public bool MoveRigidbodyAlongPath(Rigidbody2D rbToMove, float speed, int stoppingDistanceInGridCoords = 0)
     {
         bool indexIsValid = index >= 0 && index < (path.Count - stoppingDistanceInGridCoords);
-        bool arrivedAtNextNode = indexIsValid && Mathf.Abs(rbToMove.transform.position.x - path[index].worldPosition.x) <= 0.1f &&
-                                 Mathf.Abs(rbToMove.transform.position.y - path[index].worldPosition.y) <= 0.1f;
+        bool arrivedAtNextNode = indexIsValid && Mathf.Abs(rbToMove.transform.position.x - path[index].worldPosition.x) <= 0.2f &&
+                                 Mathf.Abs(rbToMove.transform.position.y - path[index].worldPosition.y) <= 0.2f;
 
         index = (arrivedAtNextNode) ? index + 1 : index;
         indexIsValid = index >= 0 && index < (path.Count - stoppingDistanceInGridCoords);
@@ -98,7 +109,7 @@ public class Path : MonoBehaviour
         source.root.eulerAngles = new Vector3(0, 0, angle);
     }
 
-    public Vector2 GetRandomWalkablePosition()
+    public Vector2 GetRandomWalkablePosition(Vector2 origin)
     {
         float dx;
         float dy;
@@ -106,18 +117,17 @@ public class Path : MonoBehaviour
 
         do
         {
-            dx = Random.Range(-6f, 6f);
-            dy = Random.Range(-6f, 6f);
-            while (dx >= -1 && dx <= 1)
+            Random.InitState(System.DateTime.Now.Millisecond);
+            dx = Random.Range(-10f, 10f);
+            dy = Random.Range(-10f, 10f);
+            while (dx > -1 && dx < 1 && dy > -1 && dy < 1)
             {
-                dx = Random.Range(-6f, 6f);
+                dx = Random.Range(-10f, 10f);
+                dy = Random.Range(-10f, 10f);
             }
-            while (dy >= -1 && dy <= 1)
-            {
-                dy = Random.Range(-6f, 6f);
-            }
-            randomPosition = new Vector2(transform.position.x + dx, transform.position.y + dy);
-        } while (grid[randomPosition] == null || (!grid[randomPosition].walkable));
+
+            randomPosition = new Vector2(origin.x + dx, origin.y + dy);
+        } while ( ( grid[randomPosition] == null || !grid[randomPosition].walkable));
 
         return randomPosition;
     }

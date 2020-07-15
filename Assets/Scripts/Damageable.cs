@@ -18,10 +18,14 @@ public class Damageable : MonoBehaviour
     }
 
 
-    public void RaiseFlag(float damageAmount, Vector2 knockbackForce )
+    public void RaiseFlag(float damageAmount, Vector2 knockbackForce)
     {
         TouchedByDamageSource = true;
-        OnDamageSourceTouched.Invoke();
+
+        if (OnDamageSourceTouched != null)
+        {
+            OnDamageSourceTouched.Invoke();
+        }
         DamageValue = damageAmount;
         KnockbackEffect(knockbackForce);
     }

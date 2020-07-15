@@ -24,11 +24,10 @@ public class ZombieFists : MonoBehaviour, IDamageSource
     void OnTriggerStay2D(Collider2D col)
     {
         isTouchingDamageable = true;
-        if (!attacking && transform.tag != col.transform.tag)
+        if (!attacking && transform.tag != col.transform.tag && col.transform.tag == "Player")
         {
             anim.SetTrigger("Attack");
             attacking = true;
-            Debug.Log("length  " + GetAnimationClip("zombie_attack").length);
             StartCoroutine(AttackAfterSeconds(GetAnimationClip("zombie_attack").length , col));
         }
 

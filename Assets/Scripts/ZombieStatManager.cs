@@ -20,9 +20,9 @@ public class ZombieStatManager : MonoBehaviour
         {
             stats.AddHealth(-damageable.DamageValue);
             damageable.LowerFlag();
-            Debug.Log("Zombie was hit");
+            //Debug.Log("Zombie was hit");
         }
-        Debug.Log($"Zombie Health {stats.Health}");
+        //Debug.Log($"Zombie Health {stats.Health}");
     }
 
 }

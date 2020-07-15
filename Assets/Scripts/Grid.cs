@@ -204,7 +204,7 @@ public class Grid
         return path;
     }
 
-    List<Node> GetNeighbors(Vector3 position)
+    public List<Node> GetNeighbors(Vector3 position)
     {
         Vector2Int indices = GetGridCoordinates(position);
         List<Node> neighbors = new List<Node>();

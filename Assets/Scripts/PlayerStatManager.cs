@@ -20,6 +20,6 @@ public class PlayerStatManager : MonoBehaviour
             Health -= damageable.DamageValue;
             damageable.LowerFlag();
         }
-        Debug.Log($"Player Health   {Health}");
+       // Debug.Log($"Player Health   {Health}");
     }
 }

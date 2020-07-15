@@ -15,10 +15,9 @@ public class Bullet : MonoBehaviour, IDamageSource
             Damageable damageable = col.gameObject.GetComponent<Damageable>();
             if (damageable != null)
             {
-                damageable.RaiseFlag(damage, aimController.LookDirection * 0.15f);
-                Destroy(gameObject);
+                damageable.RaiseFlag(damage, aimController.LookDirection * 0.35f);
             }
-
+            Destroy(gameObject);
         }
 
     }
