@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Knife : MonoBehaviour
+public class Knife : Weapon
 {
     [SerializeField] private KnifeData knife;
     [SerializeField] private PlayerMovementController movementController;
@@ -128,5 +128,10 @@ public class Knife : MonoBehaviour
     void SetHitBox(bool status)
     {
         transform.GetChild(0).gameObject.SetActive(status);
+    }
+
+    public override string GetInfo()
+    {
+        return "Knife";
     }
 }

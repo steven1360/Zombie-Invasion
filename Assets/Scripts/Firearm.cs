@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Firearm : MonoBehaviour
+public class Firearm : Weapon
 {
     [SerializeField] protected FirearmData firearm;
     [SerializeField] protected float speed = 3f;
@@ -99,5 +99,10 @@ public class Firearm : MonoBehaviour
 
 
         reloading = false;
+    }
+
+    public override string GetInfo()
+    {
+        return $"{transform.name}: {firearm.CurrentMagazineCapacity}/{firearm.TotalAmmo}";
     }
 }

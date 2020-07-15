@@ -7,7 +7,7 @@ public class PlayerWeaponController : MonoBehaviour
 {
     private Dictionary<string, Transform> weaponsDict;
     private List<Transform> weaponsList;
-    private Transform equippedWeapon;
+    public Transform EquippedWeapon { get; private set; }
 
     [SerializeField] private Knife knife;
     [SerializeField] private Firearm rifle;
@@ -30,26 +30,26 @@ public class PlayerWeaponController : MonoBehaviour
         {
             weaponsDict.Add(weapon.name, weapon);
         }
-        equippedWeapon = weaponsDict["Knife"];
+        EquippedWeapon = weaponsDict["Knife"];
     }
 
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            equippedWeapon = weaponsDict["Knife"];
+            EquippedWeapon = weaponsDict["Knife"];
         }
         else if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            equippedWeapon = weaponsDict["Pistol"];
+            EquippedWeapon = weaponsDict["Pistol"];
         }
         else if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            equippedWeapon = weaponsDict["Rifle"];
+            EquippedWeapon = weaponsDict["Rifle"];
         }
         else if (Input.GetKeyDown(KeyCode.Alpha4))
         {
-            equippedWeapon = weaponsDict["Shotgun"];
+            EquippedWeapon = weaponsDict["Shotgun"];
         }
 
 
@@ -60,7 +60,7 @@ public class PlayerWeaponController : MonoBehaviour
     {
         foreach (Transform weapon in weaponsList)
         {
-            if (weapon == equippedWeapon)
+            if (weapon == EquippedWeapon)
             {
                 weapon.gameObject.SetActive(true);
             }

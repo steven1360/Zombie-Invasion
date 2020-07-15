@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerStatManager : MonoBehaviour
 {
     private Damageable damageable;
-    public float Health = 100f;
+    public float Health { get; private set; } = 100f;
     // Start is called before the first frame update
     void Start()
     {
