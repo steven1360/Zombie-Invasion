@@ -9,8 +9,8 @@ public class PlayerWeaponController : MonoBehaviour
     private List<Transform> weaponsList;
     private Transform equippedWeapon;
 
-    [SerializeField] private KnifeAttack knife;
-    [SerializeField] private FirearmAttack rifle;
+    [SerializeField] private Knife knife;
+    [SerializeField] private Firearm rifle;
 
     void Start()
     {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AnimFrameHitbox : MonoBehaviour, IDamageSource
+public class KnifeDamageCollider : MonoBehaviour, IDamageSource
 {
     private float damage;
     public float DamageValue { get { return damage; } }

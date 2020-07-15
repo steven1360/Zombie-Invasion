@@ -2,72 +2,102 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "New Firearm", menuName = "Firearm")]
-public class Firearm : ScriptableObject
+public class Firearm : MonoBehaviour
 {
-    [SerializeField] private int currentMagazineCapacity;
-    [SerializeField] private int maxMagazineCapacity;
-    [SerializeField] private int totalAmmo;
-    [SerializeField] private float reloadTimeInSeconds;
-    [SerializeField] private float fireRateInSeconds;
-    [SerializeField] private float damage;
+    [SerializeField] protected FirearmData firearm;
+    [SerializeField] protected float speed = 3f;
+    [SerializeField] protected PlayerAimController aimController;
+    [SerializeField] protected PlayerMovementController movementController;
+    [SerializeField] protected AudioManager aud;
+    [SerializeField] protected string attackAudioClipName;
+    [SerializeField] protected string reloadAudioClipName;
+    protected Animator anim;
+    protected Transform bullet;
+    protected bool reloading;
+    protected Transform muzzle_flash;
 
-    public int CurrentMagazineCapacity { get { return currentMagazineCapacity; } }
-    public int MaxMagazineCapacity { get { return maxMagazineCapacity; } }
-    public int TotalAmmo { get { return totalAmmo; } }
-    public float ReloadTimeInSeconds { get { return reloadTimeInSeconds; } }
-    public float FireRateInSeconds { get { return fireRateInSeconds; } }
-    public float DamageValue { get { return damage; } }
-
-    public bool Reloading { get; private set; }
-    public bool AttackInTimeout { get; private set; }
-    public Clock ReloadClock { get; private set; }
-    public Clock AttackTimeoutClock { get; private set; }
-
-    void Awake()
+    void Start()
     {
-        Reloading = false;
-        AttackInTimeout = false;
-        ReloadClock = new Clock(reloadTimeInSeconds, reloadTimeInSeconds);
-        AttackTimeoutClock = new Clock(fireRateInSeconds, fireRateInSeconds);
+        anim = GetComponent<Animator>();
+        bullet = transform.GetChild(0);
+        muzzle_flash = transform.GetChild(1);
+        bullet.gameObject.SetActive(false);
+        muzzle_flash.gameObject.SetActive(false);
+        firearm = Instantiate(firearm);
+        reloading = false;
     }
 
-    public void AddToCurrentMagCapacity(int amount)
+    void Update()
     {
-        currentMagazineCapacity += amount;
-    }
+        DoAttackOnInput(Input.GetKey(KeyCode.Mouse0));
+        ReloadWeaponOnInput(Input.GetKeyDown(KeyCode.R));
+        firearm.TickClocks(Time.deltaTime);
 
-    public void AddToTotalAmmo(int amount)
-    {
-        totalAmmo += amount;
-    }
-
-    public void TickClocks(float dt)
-    {
-        ReloadClock.Tick(dt);
-        AttackTimeoutClock.Tick(dt);
-
-        if (ReloadClock.ReachedDesiredWaitTime())
+        if (!reloading && movementController.IsMoving)
         {
-            Reloading = false;
+            anim.SetBool("moving", true);
         }
         else
         {
-            Reloading = true;
+            anim.SetBool("moving", false);
         }
 
-        if (AttackTimeoutClock.ReachedDesiredWaitTime())
+        //Debug.Log($"Ammo: {firearm.CurrentMagazineCapacity}/{firearm.MaxMagazineCapacity}    Total: {firearm.TotalAmmo}");
+    }
+
+    virtual protected void DoAttackOnInput(bool keycodePressedDown)
+    {
+        bool needToReload = (firearm.CurrentMagazineCapacity == 0);
+
+        if (keycodePressedDown && !needToReload && !firearm.AttackInTimeout && !reloading)
         {
-            AttackInTimeout = false;
+            Vector2 bulletTravelDirection = aimController.LookDirection;
+            Vector3 aimControllerPosition = aimController.transform.position;
+            Transform bulletClone = Instantiate(bullet);
+            Rigidbody2D rb = bulletClone.GetComponent<Rigidbody2D>();
+
+            anim.SetTrigger("Shoot");
+            aud.PlayClip(attackAudioClipName);
+            muzzle_flash.gameObject.SetActive(true);
+            firearm.AddToCurrentMagCapacity(-1);
+            firearm.AttackTimeoutClock.ResetClock();
+
+            bulletClone.gameObject.SetActive(true);
+            bulletClone.GetComponent<IDamageSource>().SetDamageValue(firearm.DamageValue);
+            bulletClone.position = aimControllerPosition;
+            rb.velocity = bulletTravelDirection * speed;
         }
         else
         {
-            AttackInTimeout = true;
+            muzzle_flash.gameObject.SetActive(false);
         }
     }
 
-    public override string ToString()
+    void ReloadWeaponOnInput(bool keycodePressedDown)
     {
-        return "Firearm";
+        bool magazineIsFull = (firearm.MaxMagazineCapacity - firearm.CurrentMagazineCapacity) == 0;
+        bool TotalMagIsEmpty = (firearm.TotalAmmo == 0);
+
+        if (!reloading && keycodePressedDown && !magazineIsFull && !TotalMagIsEmpty)
+        {
+            anim.SetTrigger("Reload");
+            aud.PlayClip(reloadAudioClipName);
+            StartCoroutine(ReloadWeaponOnInput(firearm.ReloadTimeInSeconds));
+            reloading = true;
+        }
+
+    }
+
+    IEnumerator ReloadWeaponOnInput(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+                int amountToTakeFromTotal = Mathf.Min((firearm.MaxMagazineCapacity - firearm.CurrentMagazineCapacity), firearm.TotalAmmo);
+                firearm.AddToCurrentMagCapacity(amountToTakeFromTotal);
+                firearm.AddToTotalAmmo(-amountToTakeFromTotal);
+                firearm.ReloadClock.ResetClock();
+
+
+        reloading = false;
     }
 }
