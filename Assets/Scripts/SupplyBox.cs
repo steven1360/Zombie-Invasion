@@ -7,6 +7,7 @@ public class SupplyBox : MonoBehaviour
     public Item SupplyBoxItem { get; private set; }
     [SerializeField] private PlayerStatManager statManager;
     [SerializeField] private PlayerWeaponController weaponController;
+    [SerializeField] private AudioManager aud;
 
 
     void Start()
@@ -32,6 +33,7 @@ public class SupplyBox : MonoBehaviour
     public abstract class Item 
     {
         public abstract string UseItem();
+        public void PlaySoundEffect(AudioManager audManager) { audManager.PlayClip("supplybox_open"); }
     }
 
     public class HealthPack : Item
@@ -42,9 +44,7 @@ public class SupplyBox : MonoBehaviour
         {
             Random.InitState(System.DateTime.Now.Millisecond);
             float healAmount = Random.Range(10, 30);
-            Debug.Log("before: " + stats.Health);
             stats.AddHealth(healAmount);
-            Debug.Log("after: " + stats.Health);
             return $"Recovered {healAmount} health";
         }
     }

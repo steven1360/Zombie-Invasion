@@ -7,8 +7,8 @@ using UnityEngine.Tilemaps;
 public class Grid 
 {
     private Node[,] arr;
-    private Vector2 origin;
     private int cellSize;
+    public Vector2 Origin { get; private set; }
     public int Width { get; private set; }
     public int Height { get; private set; }
     private Tilemap tilemap;
@@ -52,8 +52,8 @@ public class Grid
 
     public Vector2Int GetGridCoordinates(Vector3 worldPosition)
     {
-        int x = Mathf.RoundToInt((worldPosition.x - origin.x) / cellSize);
-        int y = Mathf.RoundToInt((worldPosition.y - origin.y) / cellSize);
+        int x = Mathf.RoundToInt((worldPosition.x - Origin.x) / cellSize);
+        int y = Mathf.RoundToInt((worldPosition.y - Origin.y) / cellSize);
         return new Vector2Int(x, y);
     }
 
@@ -67,9 +67,8 @@ public class Grid
        // Debug.Log("origin: " + origin);
 
         arr = new Node[Width, Height];
-        origin.x = (tilemap.origin.x * 2) + 1;
-        origin.y = (tilemap.origin.y * 2) + 1;
-        arr[0, 0] = new Node(origin);
+        Origin = new Vector2((tilemap.origin.x * 2) + 1, (tilemap.origin.y * 2) + 1);
+        arr[0, 0] = new Node(Origin);
 
         
 
@@ -244,11 +243,7 @@ public class Grid
 
     float CalculateDistanceCost(Node a, Node b)
     {
-       //  int dx = Mathf.Abs(GetGridCoordinates(a.worldPosition).x - GetGridCoordinates(b.worldPosition).x);
-       // int dy = Mathf.Abs(GetGridCoordinates(a.worldPosition).y - GetGridCoordinates(b.worldPosition).y);
-      //  int remaining = Mathf.Abs(dx - dy);
-         //return 14 * Mathf.Min(dx, dy) + 10 * remaining;
         return Mathf.Abs(a.worldPosition.x - b.worldPosition.x) + Mathf.Abs(a.worldPosition.y - b.worldPosition.y);
-
     }
+
 }

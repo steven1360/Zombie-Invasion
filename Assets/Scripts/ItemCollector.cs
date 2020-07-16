@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class ItemCollector : MonoBehaviour
 {
+    [SerializeField] AudioManager aud;
     public string CollectedItemInfo { get; private set; }
 
     void OnTriggerEnter2D(Collider2D col)
@@ -12,6 +13,7 @@ public class ItemCollector : MonoBehaviour
         if (box != null)
         {
             CollectedItemInfo = box.SupplyBoxItem.UseItem();
+            box.SupplyBoxItem.PlaySoundEffect(aud);
             Destroy(box.gameObject);
         }
     }

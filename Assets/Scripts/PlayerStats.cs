@@ -10,7 +10,14 @@ public class PlayerStats : ScriptableObject
 
     public void AddHealth(float amount)
     {
-        health += amount;
+        if (health + amount > 100)
+        {
+            health = 100;
+        }
+        else
+        {
+            health += amount;
+        }
     }
    
 }
