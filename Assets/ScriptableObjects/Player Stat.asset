@@ -9,12 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 47a40f28139c35f4bbd45d5c30ba4311, type: 3}
-  m_Name: Pistol
+  m_Script: {fileID: 11500000, guid: ccafb459796687748ba4ceb1660a5b56, type: 3}
+  m_Name: Player Stat
   m_EditorClassIdentifier: 
-  currentMagazineCapacity: 16
-  maxMagazineCapacity: 16
-  totalAmmo: 30
-  reloadTimeInSeconds: 1
-  fireRateInSeconds: 0.45
-  damage: 10
+  health: 100

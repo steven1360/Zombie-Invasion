@@ -5,11 +5,16 @@ using UnityEngine;
 public class PlayerStatManager : MonoBehaviour
 {
     private Damageable damageable;
-    public float Health { get; private set; } = 100f;
+    [SerializeField] private PlayerStats stats;
+
+    public PlayerStats Stats { get { return stats; } }
+
+
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         damageable = transform.GetChild(0).GetComponent<Damageable>();
+        stats = Instantiate(stats);
     }
 
     // Update is called once per frame
@@ -17,9 +22,9 @@ public class PlayerStatManager : MonoBehaviour
     {
         if (damageable.TouchedByDamageSource)
         {
-            Health -= damageable.DamageValue;
+            stats.AddHealth(-damageable.DamageValue);
             damageable.LowerFlag();
         }
-       // Debug.Log($"Player Health   {Health}");
+       Debug.Log($"Player Health   {Stats.Health}");
     }
 }

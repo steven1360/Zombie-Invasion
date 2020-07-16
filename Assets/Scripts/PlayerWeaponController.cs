@@ -9,10 +9,7 @@ public class PlayerWeaponController : MonoBehaviour
     private List<Transform> weaponsList;
     public Transform EquippedWeapon { get; private set; }
 
-    [SerializeField] private Knife knife;
-    [SerializeField] private Firearm rifle;
-
-    void Start()
+    void Awake()
     {
         Transform[] weapons = GetComponentsInChildren<Transform>();
         weaponsList = new List<Transform>();
@@ -69,6 +66,12 @@ public class PlayerWeaponController : MonoBehaviour
                 weapon.gameObject.SetActive(false);
             }
         }
+    }
+
+    public Weapon GetWeapon(string name)
+    {
+        Debug.Log(weaponsDict[name].GetComponent<Weapon>());
+        return weaponsDict[name].GetComponent<Weapon>();
     }
 
 

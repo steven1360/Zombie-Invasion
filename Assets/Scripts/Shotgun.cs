@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShotgunAttack : Firearm
+public class Shotgun : Firearm
 {
 
     override protected void DoAttackOnInput(bool keycodePressedDown)

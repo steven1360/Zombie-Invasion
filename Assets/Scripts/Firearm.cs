@@ -23,8 +23,12 @@ public class Firearm : Weapon
         muzzle_flash = transform.GetChild(1);
         bullet.gameObject.SetActive(false);
         muzzle_flash.gameObject.SetActive(false);
-        firearm = Instantiate(firearm);
         reloading = false;
+    }
+
+    void Awake()
+    {
+        firearm = Instantiate(firearm);
     }
 
     void Update()
@@ -43,6 +47,11 @@ public class Firearm : Weapon
         }
 
         //Debug.Log($"Ammo: {firearm.CurrentMagazineCapacity}/{firearm.MaxMagazineCapacity}    Total: {firearm.TotalAmmo}");
+    }
+
+    public override FirearmData GetFirearmData()
+    {
+        return firearm;
     }
 
     virtual protected void DoAttackOnInput(bool keycodePressedDown)

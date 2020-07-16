@@ -44,6 +44,11 @@ public class Knife : Weapon
         }
     }
 
+    public override FirearmData GetFirearmData()
+    {
+        return null;
+    }
+
     AnimationClip GetAnimationClip(string name)
     {
         AnimationClip[] clips = anim.runtimeAnimatorController.animationClips;
