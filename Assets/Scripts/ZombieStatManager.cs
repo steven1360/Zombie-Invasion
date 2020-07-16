@@ -20,9 +20,13 @@ public class ZombieStatManager : MonoBehaviour
         {
             stats.AddHealth(-damageable.DamageValue);
             damageable.LowerFlag();
-            //Debug.Log("Zombie was hit");
+            if (stats.Health <= 0)
+            {
+                Transform zombie = transform.root;
+                Destroy(zombie.gameObject);
+            }
         }
-        //Debug.Log($"Zombie Health {stats.Health}");
+
     }
 
 }

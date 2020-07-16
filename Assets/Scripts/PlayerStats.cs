@@ -14,6 +14,10 @@ public class PlayerStats : ScriptableObject
         {
             health = 100;
         }
+        else if (health + amount < 0)
+        {
+            health = 0;
+        }
         else
         {
             health += amount;
