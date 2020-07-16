@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Clock
 {
-    public float DesiredWaitTime { get; private set; }
-    public float TimeElapsed { get; private set; }
+    public float DesiredWaitTime { get; set; }
+    public float TimeElapsed { get; set; }
 
     public Clock(float DesiredWaitTime, float TimeElapsed)
     {
