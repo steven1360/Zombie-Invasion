@@ -47,23 +47,17 @@ public class Path : MonoBehaviour
 
     public void ComputeAStarPath(Vector3 start, Vector3 end) 
     {
-        if (!grid[start].walkable)
-        {
-            List<Node> neighbors = grid.GetNeighbors(start);
-            foreach (Node neighbor in neighbors)
-            {
-                if (neighbor.walkable)
-                {
-                    start = neighbor.worldPosition;
-                }
-            }
-        }
         path = grid.GetShortestPath(start, end);
         index = 0;
     }
 
     public bool MoveRigidbodyAlongPath(Rigidbody2D rbToMove, float speed, int stoppingDistanceInGridCoords = 0)
     {
+        if (path == null)
+        {
+            return true;
+        }
+
         bool indexIsValid = index >= 0 && index < (path.Count - stoppingDistanceInGridCoords);
         bool arrivedAtNextNode = indexIsValid && Mathf.Abs(rbToMove.transform.position.x - path[index].worldPosition.x) <= 0.2f &&
                                  Mathf.Abs(rbToMove.transform.position.y - path[index].worldPosition.y) <= 0.2f;
