@@ -70,7 +70,6 @@ public class PlayerWeaponController : MonoBehaviour
 
     public Weapon GetWeapon(string name)
     {
-        Debug.Log(weaponsDict[name].GetComponent<Weapon>());
         return weaponsDict[name].GetComponent<Weapon>();
     }
 

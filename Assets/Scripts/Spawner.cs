@@ -14,6 +14,7 @@ public abstract class Spawner : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Random.InitState(System.DateTime.Now.Millisecond);
         clock = new Clock(GetTimeBetweenSpawn(0), 0);
         timeElapsed = 0;
         grid = new Grid(tilemap);
@@ -47,7 +48,6 @@ public abstract class Spawner : MonoBehaviour
 
     protected Transform GetRandomSpawnTransform()
     {
-        Random.InitState(System.DateTime.Now.Millisecond);
         return transform.GetChild(Random.Range(1, transform.childCount));
     }
 }

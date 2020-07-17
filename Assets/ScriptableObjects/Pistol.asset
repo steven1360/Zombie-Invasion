@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47a40f28139c35f4bbd45d5c30ba4311, type: 3}
   m_Name: Pistol
   m_EditorClassIdentifier: 
-  currentMagazineCapacity: 16
+  currentMagazineCapacity: 0
   maxMagazineCapacity: 16
-  totalAmmo: 30
+  totalAmmo: 0
   reloadTimeInSeconds: 1
   fireRateInSeconds: 0.45
-  damage: 10
+  damage: 20

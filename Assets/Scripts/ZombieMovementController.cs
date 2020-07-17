@@ -20,6 +20,8 @@ public class ZombieMovementController : MonoBehaviour
     private Vector2 randomDestination;
     private Clock clock;
 
+    private float timeElapsed;
+
 
     // Start is called before the first frame update
     void Awake()
@@ -32,12 +34,17 @@ public class ZombieMovementController : MonoBehaviour
         path.gameObject.SetActive(true);
         path.GetComponent<Transform>().parent = transform;
         clock.SetRandomWaitTime(1.35f, 3.4f);
-
-        damageable.OnDamageSourceTouched += () => wanderer_state = WandererBehavior_SM.Chase;
+        timeElapsed = 0;
+        damageable.OnDamageSourceTouched += () =>
+        {
+            LookAt(player.position);
+            wanderer_state = WandererBehavior_SM.Chase;
+        };
     }
 
     void Update()
     {
+        timeElapsed += Time.deltaTime;
         if (!path.grid[transform.position].walkable && (wanderer_state != WandererBehavior_SM.Chase) )
         {
             List<Node> neighbors = path.grid.GetNeighbors(transform.position);
@@ -53,7 +60,18 @@ public class ZombieMovementController : MonoBehaviour
 
     void FixedUpdate()
     {
-        Tick_WandererSM();
+        float x = transform.position.x - player.position.x;
+        float y = transform.position.y - player.position.y;
+
+        if (Mathf.Pow(x, 2) + Mathf.Pow(y, 2) > Mathf.Pow(35, 2))
+        {
+            Tick_WandererSM(1);
+        }
+        else
+        {
+            Tick_WandererSM(0);
+        }
+
     }
 
     void LookAt(Vector2 targetToLookAt)
@@ -82,8 +100,17 @@ public class ZombieMovementController : MonoBehaviour
     }
 
 
-    void Tick_WandererSM()
+    void Tick_WandererSM(float period)
     {
+        if (timeElapsed < period)
+        {
+            return;
+        }
+        else
+        {
+            timeElapsed = 0;
+        }
+
         //transitions
         switch (wanderer_state)
         {
@@ -114,7 +141,7 @@ public class ZombieMovementController : MonoBehaviour
                 }
                 else
                 {
-                    clock.Tick(Time.fixedDeltaTime);
+                    clock.Tick(Time.fixedDeltaTime + period);
                 }
 
                 if (fov.PlayerInRange)
@@ -172,7 +199,7 @@ public class ZombieMovementController : MonoBehaviour
             if (farFromplayer && fov.PlayerInRange)
             {
                 LookAt(target);
-                rb.MovePosition(transform.position + (Vector3)zombieToTarget * statController.Stats.Speed * Time.fixedDeltaTime * Random.Range(1.3f, 2.9f));
+                rb.MovePosition(transform.position + (Vector3)zombieToTarget * statController.Stats.Speed * (Time.fixedDeltaTime + period) * Random.Range(1.3f, 2.9f));
             }
 
 

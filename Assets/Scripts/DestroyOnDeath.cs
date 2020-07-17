@@ -4,14 +4,28 @@ using UnityEngine;
 
 public class DestroyOnDeath : MonoBehaviour
 {
-    [SerializeField] private PlayerStatManager statManager;
+    [SerializeField] private GameObject obj;
+    [SerializeField] private float delayInSeconds;
+    private IKillable killable;
+
+    void Start()
+    {
+        killable = obj.GetComponent<IKillable>();
+    }
 
     // Update is called once per frame
     void Update()
     {
-        if (statManager.Stats.Health <= 0)
+        if (killable != null && killable.IsDead())
         {
-            Destroy(gameObject);
+            StartCoroutine(DestroyAfterSeconds(delayInSeconds));
+            killable = null; //ensures couroutine gets called only once
         }
+    }
+
+    IEnumerator DestroyAfterSeconds(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        Destroy(gameObject);
     }
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ZombieStatManager : MonoBehaviour
+public class ZombieStatManager : MonoBehaviour, IKillable
 {
     [SerializeField] private ZombieStats stats;
     [SerializeField] private Damageable damageable;
@@ -20,13 +20,13 @@ public class ZombieStatManager : MonoBehaviour
         {
             stats.AddHealth(-damageable.DamageValue);
             damageable.LowerFlag();
-            if (stats.Health <= 0)
-            {
-                Transform zombie = transform.root;
-                Destroy(zombie.gameObject);
-            }
         }
 
+    }
+
+    public bool IsDead()
+    {
+        return (stats.Health <= 0) ? true : false;
     }
 
 }

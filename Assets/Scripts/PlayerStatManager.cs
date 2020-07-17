@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerStatManager : MonoBehaviour
+public class PlayerStatManager : MonoBehaviour, IKillable
 {
     private Damageable damageable;
     [SerializeField] private PlayerStats stats;
@@ -25,6 +25,11 @@ public class PlayerStatManager : MonoBehaviour
             stats.AddHealth(-damageable.DamageValue);
             damageable.LowerFlag();
         }
-       Debug.Log($"Player Health   {Stats.Health}");
     }
+
+    public bool IsDead()
+    {
+        return (stats.Health <= 0) ? true : false;
+    }
+
 }

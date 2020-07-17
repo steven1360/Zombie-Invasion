@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbed97adeac25e749bf5bd85969112aa, type: 3}
   m_Name: Knife
   m_EditorClassIdentifier: 
-  damageValue: 5
+  damageValue: 200
   secondsBetweenAttacks: 0.48333
