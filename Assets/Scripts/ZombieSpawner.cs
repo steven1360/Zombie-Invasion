@@ -6,13 +6,13 @@ public class ZombieSpawner : Spawner
 {
     protected override float GetTimeBetweenSpawn(float timeElapsed)
     {
-        if (timeElapsed <= 720)
+        if (timeElapsed <= 360)
         {
-            return 10 - ( (1 / 60f) * timeElapsed);
+            return 7 - ( (1 / 60f) * timeElapsed);
         }
         else
         {
-            return 4;
+            return 1;
         }
     }
 

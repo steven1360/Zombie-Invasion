@@ -10,7 +10,7 @@ enum WandererBehavior_SM { Start, GoToRandomLocation, Wait, Chase, ExtendedChase
 public class ZombieMovementController : MonoBehaviour
 {
     [SerializeField] private Transform player;
-    [SerializeField] private ZombieStatManager statController;
+    [SerializeField] private ZombieStatManager statsManager;
     [SerializeField] private Damageable damageable;
     [SerializeField] Path path;
     private Rigidbody2D rb;
@@ -19,7 +19,6 @@ public class ZombieMovementController : MonoBehaviour
     private WandererBehavior_SM wanderer_state;
     private Vector2 randomDestination;
     private Clock clock;
-
     private float timeElapsed;
 
 
@@ -60,18 +59,14 @@ public class ZombieMovementController : MonoBehaviour
 
     void FixedUpdate()
     {
+
         float x = transform.position.x - player.position.x;
         float y = transform.position.y - player.position.y;
 
-        if (Mathf.Pow(x, 2) + Mathf.Pow(y, 2) > Mathf.Pow(35, 2))
+        if (Mathf.Pow(x, 2) + Mathf.Pow(y, 2) <= Mathf.Pow(50, 2))
         {
-            Tick_WandererSM(1);
+            Tick_WandererSM();
         }
-        else
-        {
-            Tick_WandererSM(0);
-        }
-
     }
 
     void LookAt(Vector2 targetToLookAt)
@@ -100,16 +95,8 @@ public class ZombieMovementController : MonoBehaviour
     }
 
 
-    void Tick_WandererSM(float period)
+    void Tick_WandererSM()
     {
-        if (timeElapsed < period)
-        {
-            return;
-        }
-        else
-        {
-            timeElapsed = 0;
-        }
 
         //transitions
         switch (wanderer_state)
@@ -123,7 +110,7 @@ public class ZombieMovementController : MonoBehaviour
                 break;
             case WandererBehavior_SM.GoToRandomLocation:
 
-                bool arrivedAtTarget = path.MoveRigidbodyAlongPath(rb, statController.Stats.Speed);
+                bool arrivedAtTarget = path.MoveRigidbodyAlongPath(rb, statsManager.Stats.Speed);
                 wanderer_state = (arrivedAtTarget) ? WandererBehavior_SM.Wait : wanderer_state;
                 wanderer_state = (fov.PlayerInRange) ? WandererBehavior_SM.Chase : wanderer_state;
                 break;
@@ -141,7 +128,7 @@ public class ZombieMovementController : MonoBehaviour
                 }
                 else
                 {
-                    clock.Tick(Time.fixedDeltaTime + period);
+                    clock.Tick(Time.fixedDeltaTime);
                 }
 
                 if (fov.PlayerInRange)
@@ -163,7 +150,7 @@ public class ZombieMovementController : MonoBehaviour
 
                 break;
             case WandererBehavior_SM.ExtendedChase:
-                bool doneTraversingPath = path.MoveRigidbodyAlongPath(rb, statController.Stats.Speed);
+                bool doneTraversingPath = path.MoveRigidbodyAlongPath(rb, statsManager.Stats.Speed);
                 wanderer_state = (doneTraversingPath) ? WandererBehavior_SM.Wait : wanderer_state;
                 wanderer_state = (fov.PlayerInRange) ? WandererBehavior_SM.Chase : wanderer_state;
                 break;
@@ -199,7 +186,7 @@ public class ZombieMovementController : MonoBehaviour
             if (farFromplayer && fov.PlayerInRange)
             {
                 LookAt(target);
-                rb.MovePosition(transform.position + (Vector3)zombieToTarget * statController.Stats.Speed * (Time.fixedDeltaTime + period) * Random.Range(1.3f, 2.9f));
+                rb.MovePosition(transform.position + (Vector3)zombieToTarget * statsManager.Stats.Speed * (Time.fixedDeltaTime) * Random.Range(1.3f, 2.9f));
             }
 
 

@@ -60,6 +60,12 @@ public class PlayerWeaponController : MonoBehaviour
             if (weapon == EquippedWeapon)
             {
                 weapon.gameObject.SetActive(true);
+                Firearm firearm = weapon.GetComponent<Firearm>();
+                if (firearm != null)
+                {
+                    //in case weapon switched while reloading, stops 'reloading' from being stuck in true
+                    firearm.SetReloading(false); 
+                }
             }
             else
             {

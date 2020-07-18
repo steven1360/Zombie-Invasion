@@ -112,12 +112,12 @@ public class Path : MonoBehaviour
         do
         {
             Random.InitState(System.DateTime.Now.Millisecond);
-            dx = Random.Range(-10f, 10f);
-            dy = Random.Range(-10f, 10f);
+            dx = Random.Range(-18f, 18f);
+            dy = Random.Range(-18f, 18f);
             while (dx > -1 && dx < 1 && dy > -1 && dy < 1)
             {
-                dx = Random.Range(-10f, 10f);
-                dy = Random.Range(-10f, 10f);
+                dx = Random.Range(-18f, 18f);
+                dy = Random.Range(-18f, 18f);
             }
 
             randomPosition = new Vector2(origin.x + dx, origin.y + dy);

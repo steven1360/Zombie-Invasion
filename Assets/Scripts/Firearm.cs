@@ -46,7 +46,6 @@ public class Firearm : Weapon
             anim.SetBool("moving", false);
         }
 
-        //Debug.Log($"Ammo: {firearm.CurrentMagazineCapacity}/{firearm.MaxMagazineCapacity}    Total: {firearm.TotalAmmo}");
     }
 
     public override FirearmData GetFirearmData()
@@ -113,5 +112,10 @@ public class Firearm : Weapon
     public override string GetInfo()
     {
         return $"{transform.name}: {firearm.CurrentMagazineCapacity}/{firearm.TotalAmmo}";
+    }
+
+    public void SetReloading(bool b)
+    {
+        reloading = b;
     }
 }

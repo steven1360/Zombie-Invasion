@@ -66,8 +66,18 @@ public class FirearmData : ScriptableObject
         }
     }
 
-    public override string ToString()
+    public void AddToFireRate(float amount)
     {
-        return "Firearm";
+        if (fireRateInSeconds > 0.06f)
+        {
+            fireRateInSeconds += amount;
+            AttackTimeoutClock.DesiredWaitTime = fireRateInSeconds;
+        }
+
+    }
+
+    public void AddToMaxMagCapacity(int amount)
+    {
+        maxMagazineCapacity += amount;
     }
 }

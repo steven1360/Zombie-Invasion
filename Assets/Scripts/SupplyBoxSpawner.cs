@@ -8,13 +8,13 @@ public class SupplyBoxSpawner : Spawner
 
     protected override float GetTimeBetweenSpawn(float timeElapsed)
     {
-        if (timeElapsed <= 240)
+        if (timeElapsed <= 180)
         {
-            return 7 - ((1 / 60f) * timeElapsed);
+            return 4 - ((1 / 60f) * timeElapsed);
         }
         else
         {
-            return 3;
+            return 1;
         }
     }
 
@@ -33,5 +33,12 @@ public class SupplyBoxSpawner : Spawner
             nextSpawnLocation = spawnTransform.position;
             obj.parent = spawnTransform;
         }
+    }
+
+    public void SpawnSupplyBox(Transform location)
+    {
+        Transform obj = Instantiate(objectToSpawn);
+        obj.gameObject.SetActive(true);
+        obj.position = location.position;
     }
 }

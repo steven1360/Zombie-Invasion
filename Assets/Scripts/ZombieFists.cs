@@ -41,12 +41,16 @@ public class ZombieFists : MonoBehaviour, IDamageSource
     IEnumerator AttackAfterSeconds(float seconds, Collider2D col)
     {
         yield return new WaitForSeconds(seconds);
-        Damageable damageable = col.GetComponent<Damageable>();
-        if (damageable != null && isTouchingDamageable)
+        if ( col != null)
         {
-            damageable.RaiseFlag(DamageValue, Vector2.zero);
+            Damageable damageable = col.GetComponent<Damageable>();
+            if (damageable != null && isTouchingDamageable)
+            {
+                damageable.RaiseFlag(DamageValue, Vector2.zero);
+            }
+            attacking = false;
         }
-        attacking = false;
+
     }
 
 
