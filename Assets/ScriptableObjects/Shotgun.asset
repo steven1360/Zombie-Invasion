@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Shotgun
   m_EditorClassIdentifier: 
   currentMagazineCapacity: 0
-  maxMagazineCapacity: 8
+  maxMagazineCapacity: 5
   totalAmmo: 0
   reloadTimeInSeconds: 1
   fireRateInSeconds: 0.8
-  damage: 35
+  damage: 30

@@ -113,7 +113,7 @@ public class SupplyBox : MonoBehaviour
             if (stats != null)
             {
                 Random.InitState(System.DateTime.Now.Millisecond);
-                int ammoReceived = Random.Range(10, 20);
+                int ammoReceived = Random.Range(3, 8);
                 stats.AddToTotalAmmo(ammoReceived);
                 return $"+{ammoReceived} shotgun ammo";
             }

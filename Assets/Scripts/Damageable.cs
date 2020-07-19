@@ -5,39 +5,38 @@ using UnityEngine;
 
 public class Damageable : MonoBehaviour
 {
-    public bool TouchedByDamageSource { get; private set; }
-    public float DamageValue { get; private set; }
+    private Queue<DamageSource> damageSources;
 
     public delegate void DSDel();
     public event DSDel OnDamageSourceTouched;
 
     void Start()
     {
-        TouchedByDamageSource = false;
-        DamageValue = 0;
+        damageSources = new Queue<DamageSource>();
     }
 
-
-    public void RaiseFlag(float damageAmount, Vector2 knockbackForce)
+    public void EnqueueDamageSource(DamageSource source)
     {
-        TouchedByDamageSource = true;
-
+        damageSources.Enqueue(source);
         if (OnDamageSourceTouched != null)
         {
             OnDamageSourceTouched.Invoke();
         }
-        DamageValue = damageAmount;
-        KnockbackEffect(knockbackForce);
     }
 
-    public void LowerFlag()
+
+    public DamageSource GetNextDamageSource()
     {
-        TouchedByDamageSource = false;
-        DamageValue = 0;
+        if (damageSources.Count == 0)
+        {
+            return null;
+        }
+        else
+        {
+            DamageSource nextSrc = damageSources.Peek();
+            damageSources.Dequeue();
+            return nextSrc;
+        }
     }
 
-    void KnockbackEffect(Vector2 knockbackForce)
-    {
-        transform.root.position += (Vector3)knockbackForce;
-    }
 }

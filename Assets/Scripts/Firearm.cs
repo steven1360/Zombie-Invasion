@@ -64,6 +64,7 @@ public class Firearm : Weapon
             Vector3 aimControllerPosition = aimController.transform.position;
             Transform bulletClone = Instantiate(bullet);
             Rigidbody2D rb = bulletClone.GetComponent<Rigidbody2D>();
+            DamageSource damageSource = bulletClone.GetComponent<DamageSource>();
 
             anim.SetTrigger("Shoot");
             aud.PlayClip(attackAudioClipName);
@@ -72,7 +73,8 @@ public class Firearm : Weapon
             firearm.AttackTimeoutClock.ResetClock();
 
             bulletClone.gameObject.SetActive(true);
-            bulletClone.GetComponent<IDamageSource>().SetDamageValue(firearm.DamageValue);
+            damageSource.SetDamageValue(firearm.DamageValue);
+            damageSource.SetKnockback(aimController.LookDirection * 0.35f);
             bulletClone.position = aimControllerPosition;
             rb.velocity = bulletTravelDirection * speed;
         }

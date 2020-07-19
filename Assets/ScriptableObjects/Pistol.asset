@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Pistol
   m_EditorClassIdentifier: 
   currentMagazineCapacity: 0
-  maxMagazineCapacity: 16
+  maxMagazineCapacity: 8
   totalAmmo: 0
   reloadTimeInSeconds: 1
   fireRateInSeconds: 0.45

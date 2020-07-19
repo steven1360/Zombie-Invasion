@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Rifle
   m_EditorClassIdentifier: 
   currentMagazineCapacity: 0
-  maxMagazineCapacity: 40
+  maxMagazineCapacity: 30
   totalAmmo: 0
   reloadTimeInSeconds: 2
   fireRateInSeconds: 0.15
-  damage: 12
+  damage: 15

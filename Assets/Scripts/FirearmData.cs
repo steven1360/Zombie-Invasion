@@ -68,12 +68,15 @@ public class FirearmData : ScriptableObject
 
     public void AddToFireRate(float amount)
     {
-        if (fireRateInSeconds > 0.06f)
+        if (fireRateInSeconds > 0.05f)
         {
             fireRateInSeconds += amount;
-            AttackTimeoutClock.DesiredWaitTime = fireRateInSeconds;
         }
-
+        else
+        {
+            fireRateInSeconds = 0.05f;
+        }
+        AttackTimeoutClock.DesiredWaitTime = fireRateInSeconds;
     }
 
     public void AddToMaxMagCapacity(int amount)

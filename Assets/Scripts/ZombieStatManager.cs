@@ -16,10 +16,11 @@ public class ZombieStatManager : MonoBehaviour, IKillable
 
     void Update()
     {
-        if (damageable.TouchedByDamageSource)
+        DamageSource nextDamageSource = damageable.GetNextDamageSource();
+        if (nextDamageSource != null)
         {
-            stats.AddHealth(-damageable.DamageValue);
-            damageable.LowerFlag();
+            stats.AddHealth(-nextDamageSource.DamageValue);
+            nextDamageSource.Done();
         }
 
     }

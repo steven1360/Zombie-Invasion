@@ -44,17 +44,6 @@ public class ZombieMovementController : MonoBehaviour
     void Update()
     {
         timeElapsed += Time.deltaTime;
-        if (!path.grid[transform.position].walkable && (wanderer_state != WandererBehavior_SM.Chase) )
-        {
-            List<Node> neighbors = path.grid.GetNeighbors(transform.position);
-            foreach (Node neighbor in neighbors)
-            {
-                if (neighbor.walkable)
-                {
-                    transform.position = neighbor.worldPosition;
-                }
-            }
-        }
     }
 
     void FixedUpdate()

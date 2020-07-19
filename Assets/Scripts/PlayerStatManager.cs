@@ -20,10 +20,10 @@ public class PlayerStatManager : MonoBehaviour, IKillable
     // Update is called once per frame
     void Update()
     {
-        if (damageable.TouchedByDamageSource)
+        DamageSource nextDamageSource = damageable.GetNextDamageSource();
+        if (nextDamageSource != null)
         {
-            stats.AddHealth(-damageable.DamageValue);
-            damageable.LowerFlag();
+            stats.AddHealth(-nextDamageSource.DamageValue);
         }
     }
 

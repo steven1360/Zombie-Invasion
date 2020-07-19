@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ZombieFists : MonoBehaviour, IDamageSource
+public class ZombieFists : DamageSource
 {
     [SerializeField] private float damage;
     private Animator anim;
@@ -10,7 +10,6 @@ public class ZombieFists : MonoBehaviour, IDamageSource
     private bool isTouchingDamageable;
 
     public bool ReadyForAttack { get; private set; }
-    public float DamageValue { get; private set; }
 
     void Start()
     {
@@ -46,18 +45,13 @@ public class ZombieFists : MonoBehaviour, IDamageSource
             Damageable damageable = col.GetComponent<Damageable>();
             if (damageable != null && isTouchingDamageable)
             {
-                damageable.RaiseFlag(DamageValue, Vector2.zero);
+                damageable.EnqueueDamageSource(this);
             }
             attacking = false;
         }
 
     }
 
-
-    void IDamageSource.SetDamageValue(float value)
-    {
-        damage = value;
-    }
 
     AnimationClip GetAnimationClip(string name)
     {

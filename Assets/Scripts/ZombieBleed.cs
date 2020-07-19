@@ -13,7 +13,7 @@ public class ZombieBleed : MonoBehaviour
         damageable.OnDamageSourceTouched += () => {
             if (!playingBleedAnim)
             {
-                StartCoroutine(SetActiveForSeconds(0.5f));
+                StartCoroutine(SetActiveForSeconds(0.3f));
             }
         };
     }
