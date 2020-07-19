@@ -12,11 +12,13 @@ public class UI : MonoBehaviour
     [SerializeField] private Text ammoDisplay;
     [SerializeField] private Text healthDisplay;
     [SerializeField] private Text supplyItemDisplay;
+    [SerializeField] private Text killsDisplay;
 
     void Update()
     {
         ammoDisplay.text = weaponController.EquippedWeapon.GetComponent<Weapon>().GetInfo();
         healthDisplay.text = $"Health: {statManager.Stats.Health}";
         supplyItemDisplay.text = $"{itemCollector.CollectedItemInfo}";
+        killsDisplay.text = $"Kills: {statManager.Stats.Kills}";
     }
 }

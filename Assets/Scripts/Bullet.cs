@@ -12,7 +12,7 @@ public class Bullet : MonoBehaviour, IDamageSource
     {
         if (transform.tag != col.transform.tag)
         {
-            Damageable damageable = col.gameObject.GetComponent<Damageable>();
+            Damageable damageable = col.GetComponent<Damageable>();
             if (damageable != null)
             {
                 damageable.RaiseFlag(damage, aimController.LookDirection * 0.35f);

@@ -15,6 +15,7 @@ public class Firearm : Weapon
     protected Transform bullet;
     protected bool reloading;
     protected Transform muzzle_flash;
+    public bool Reloading { get { return reloading; } }
 
     void Start()
     {
@@ -99,11 +100,10 @@ public class Firearm : Weapon
     IEnumerator ReloadWeaponOnInput(float delay)
     {
         yield return new WaitForSeconds(delay);
-
-                int amountToTakeFromTotal = Mathf.Min((firearm.MaxMagazineCapacity - firearm.CurrentMagazineCapacity), firearm.TotalAmmo);
-                firearm.AddToCurrentMagCapacity(amountToTakeFromTotal);
-                firearm.AddToTotalAmmo(-amountToTakeFromTotal);
-                firearm.ReloadClock.ResetClock();
+        int amountToTakeFromTotal = Mathf.Min((firearm.MaxMagazineCapacity - firearm.CurrentMagazineCapacity), firearm.TotalAmmo);
+        firearm.AddToCurrentMagCapacity(amountToTakeFromTotal);
+        firearm.AddToTotalAmmo(-amountToTakeFromTotal);
+        firearm.ReloadClock.ResetClock();
 
 
         reloading = false;
@@ -114,8 +114,4 @@ public class Firearm : Weapon
         return $"{transform.name}: {firearm.CurrentMagazineCapacity}/{firearm.TotalAmmo}";
     }
 
-    public void SetReloading(bool b)
-    {
-        reloading = b;
-    }
 }

@@ -6,7 +6,10 @@ using UnityEngine;
 public class PlayerStats : ScriptableObject
 {
     [SerializeField] private float health;
+    [SerializeField] private int kills;
+
     public float Health { get { return health; } }
+    public float Kills { get { return kills; } }
 
     public void AddHealth(float amount)
     {
@@ -23,5 +26,9 @@ public class PlayerStats : ScriptableObject
             health += amount;
         }
     }
-   
+
+    public void AddKills(int amount)
+    {
+        kills += amount;
+    }
 }

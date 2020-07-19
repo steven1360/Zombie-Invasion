@@ -38,7 +38,6 @@ public class Damageable : MonoBehaviour
 
     void KnockbackEffect(Vector2 knockbackForce)
     {
-       // Debug.Log($"{transform.parent.name} was knocked back with a force of {knockbackForce.magnitude}");
         transform.root.position += (Vector3)knockbackForce;
     }
 }

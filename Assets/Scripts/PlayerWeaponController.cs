@@ -32,6 +32,12 @@ public class PlayerWeaponController : MonoBehaviour
 
     void Update()
     {
+        Firearm firearm = EquippedWeapon.GetComponent<Firearm>();
+        if (firearm != null && firearm.Reloading)
+        {
+            return;
+        }
+
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             EquippedWeapon = weaponsDict["Knife"];
@@ -60,12 +66,6 @@ public class PlayerWeaponController : MonoBehaviour
             if (weapon == EquippedWeapon)
             {
                 weapon.gameObject.SetActive(true);
-                Firearm firearm = weapon.GetComponent<Firearm>();
-                if (firearm != null)
-                {
-                    //in case weapon switched while reloading, stops 'reloading' from being stuck in true
-                    firearm.SetReloading(false); 
-                }
             }
             else
             {

@@ -189,7 +189,6 @@ public class ZombieMovementController : MonoBehaviour
                 rb.MovePosition(transform.position + (Vector3)zombieToTarget * statsManager.Stats.Speed * (Time.fixedDeltaTime) * Random.Range(1.3f, 2.9f));
             }
 
-
         }
     }
 
