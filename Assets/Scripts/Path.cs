@@ -5,7 +5,7 @@ using UnityEngine.Tilemaps;
 
 public class Path : MonoBehaviour
 {
-    [SerializeField] Tilemap tilemap;
+    [SerializeField] Tilemap[] tilemap;
     private List<Node> path;
     private int index;
     public Grid grid;
@@ -13,9 +13,10 @@ public class Path : MonoBehaviour
     void Awake()
     {
         Random.InitState(System.DateTime.Now.Millisecond);
-        grid = new Grid(tilemap);
+        grid = new Grid(tilemap[0]);
         path = new List<Node>();
         index = 0;
+        grid.MarkUnwalkableNodes(tilemap[1]);
     }
 
 

@@ -18,7 +18,7 @@ public class Grid
         this.tilemap = tilemap;
         cellSize = 2;
         InitGrid();
-        MarkUnwalkableNodes();
+        MarkUnwalkableNodes(tilemap);
     }
 
     public Node this[int x, int y] {
@@ -62,9 +62,6 @@ public class Grid
         Width = tilemap.cellBounds.size.x;
         Height = tilemap.cellBounds.size.y;
 
-        //Debug.Log("Width: " + Width);
-       // Debug.Log("height: " + Height);
-       // Debug.Log("origin: " + origin);
 
         arr = new Node[Width, Height];
         Origin = new Vector2((tilemap.origin.x * 2) + 1, (tilemap.origin.y * 2) + 1);
@@ -101,10 +98,10 @@ public class Grid
         }
     }
 
-    void MarkUnwalkableNodes()
+    public void MarkUnwalkableNodes(Tilemap tMap)
     {
         BoundsInt bounds = tilemap.cellBounds;
-        TileBase[] allTiles = tilemap.GetTilesBlock(bounds);
+        TileBase[] allTiles = tMap.GetTilesBlock(bounds);
 
         for (int x = 0; x < bounds.size.x; x++)
         {
