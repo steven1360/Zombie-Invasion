@@ -6,12 +6,14 @@ public class ZombieStatManager : MonoBehaviour, IKillable
 {
     [SerializeField] private ZombieStats stats;
     [SerializeField] private Damageable damageable;
+    private Rigidbody2D rb;
 
     public ZombieStats Stats { get { return stats; } }
 
     void Start()
     {
         stats = Instantiate(stats);
+        rb = GetComponentInParent<Rigidbody2D>();
     }
 
     void Update()
@@ -20,6 +22,7 @@ public class ZombieStatManager : MonoBehaviour, IKillable
         if (nextDamageSource != null)
         {
             stats.AddHealth(-nextDamageSource.DamageValue);
+            transform.parent.position += (Vector3)nextDamageSource.Knockback;
             nextDamageSource.Done();
         }
 

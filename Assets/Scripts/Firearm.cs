@@ -74,7 +74,7 @@ public class Firearm : Weapon
 
             bulletClone.gameObject.SetActive(true);
             damageSource.SetDamageValue(firearm.DamageValue);
-            damageSource.SetKnockback(aimController.LookDirection * 0.35f);
+            damageSource.SetKnockback(aimController.LookDirection * 0.25f);
             bulletClone.position = aimControllerPosition;
             rb.velocity = bulletTravelDirection * speed;
         }

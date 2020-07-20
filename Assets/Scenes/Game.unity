@@ -2397,7 +2397,6 @@ GameObject:
   - component: {fileID: 653654999}
   - component: {fileID: 653655001}
   - component: {fileID: 653655000}
-  - component: {fileID: 653655002}
   m_Layer: 10
   m_Name: Blood
   m_TagString: Untagged
@@ -2412,8 +2411,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 653654998}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.6199999, y: -0.2599995, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1280944773}
@@ -2488,20 +2487,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &653655002
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 653654998}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 164a46c5cf261b74492647be935103c3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  damageable: {fileID: 1237593208}
-  blood: {fileID: 653654999}
 --- !u!1 &687327338 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6504245982635105004, guid: 07c1f176e87868f408b6584bd76799a7,
