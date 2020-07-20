@@ -41,6 +41,7 @@ public class Shotgun : Firearm
             {
                 bulletClones[i].gameObject.SetActive(true);
                 bulletClones[i].GetComponent<DamageSource>().SetDamageValue(firearm.DamageValue);
+                bulletClones[i].GetComponent<DamageSource>().SetKnockback(aimController.LookDirection * 0.65f);
                 bulletClones[i].position = aimControllerPosition;
                 bulletCloneRBs[i].velocity = bulletTravelDirections[i] * speed;
             }

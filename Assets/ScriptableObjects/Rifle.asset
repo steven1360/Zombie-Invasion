@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47a40f28139c35f4bbd45d5c30ba4311, type: 3}
   m_Name: Rifle
   m_EditorClassIdentifier: 
-  currentMagazineCapacity: 60
+  currentMagazineCapacity: 0
   maxMagazineCapacity: 30
   totalAmmo: 0
   reloadTimeInSeconds: 2

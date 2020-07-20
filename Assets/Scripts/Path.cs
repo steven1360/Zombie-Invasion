@@ -12,38 +12,12 @@ public class Path : MonoBehaviour
 
     void Awake()
     {
+        Random.InitState(System.DateTime.Now.Millisecond);
         grid = new Grid(tilemap);
         path = new List<Node>();
         index = 0;
-        gameObject.SetActive(false);
     }
 
-    void OnDrawGizmos()
-    {/*
-        for (int x = 0; x < grid.Width; x++)
-        {
-
-            for (int y = 0; y < grid.Height; y++)
-            {
-                if (grid[x, y].walkable)
-                {
-                    Gizmos.color = Color.red;
-                    Gizmos.DrawCube(grid[x, y].worldPosition, new Vector3(1, 1, 1) * 0.5f);
-                }
-                else
-                {
-                    Gizmos.color = Color.yellow;
-                    Gizmos.DrawCube(grid[x, y].worldPosition, new Vector3(1, 1, 1) * 0.5f);
-                }
-            }
-        }
-
-        foreach (Node node in path)
-        {
-            Gizmos.color = Color.blue;
-            Gizmos.DrawCube(node.worldPosition, new Vector3(1, 1, 1) * 0.5f);
-        }*/
-    }
 
     public void ComputeAStarPath(Vector3 start, Vector3 end) 
     {
@@ -111,7 +85,6 @@ public class Path : MonoBehaviour
 
         do
         {
-            Random.InitState(System.DateTime.Now.Millisecond);
             dx = Random.Range(-18f, 18f);
             dy = Random.Range(-18f, 18f);
             while (dx > -1 && dx < 1 && dy > -1 && dy < 1)

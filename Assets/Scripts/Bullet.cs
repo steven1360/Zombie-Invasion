@@ -22,6 +22,11 @@ public class Bullet : DamageSource
             }
         }
 
+        if (col.tag == "Tilemap")
+        {
+            Destroy(gameObject);
+        }
+
     }
 
 }

@@ -68,13 +68,13 @@ public class FirearmData : ScriptableObject
 
     public void AddToFireRate(float amount)
     {
-        if (fireRateInSeconds > 0.05f)
+        if (fireRateInSeconds > 0.07f)
         {
             fireRateInSeconds += amount;
         }
         else
         {
-            fireRateInSeconds = 0.05f;
+            fireRateInSeconds = 0.07f;
         }
         AttackTimeoutClock.DesiredWaitTime = fireRateInSeconds;
     }

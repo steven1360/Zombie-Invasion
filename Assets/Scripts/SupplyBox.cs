@@ -129,10 +129,25 @@ public class SupplyBox : MonoBehaviour
         {
             if (weapon != null)
             {
-                weapon.GetFirearmData().AddToFireRate(-0.02f);
+                float upgradeAmount = GetUpgradeAmount(weapon.name);
+                weapon.GetFirearmData().AddToFireRate(upgradeAmount);
                 return $"Upgraded {weapon.name} Fire Rate";
             }
             return "";
+        }
+
+        private float GetUpgradeAmount(string weaponName)
+        {
+            switch(weaponName)
+            {
+                case "Pistol":
+                    return -0.02f;
+                case "Rifle":
+                    return -0.01f;
+                case "Shotgun":
+                    return -0.05f;
+            }
+            return 0;
         }
     }
 
@@ -147,10 +162,11 @@ public class SupplyBox : MonoBehaviour
                 Random.InitState(System.DateTime.Now.Millisecond);
                 int bonusCapacity = Random.Range(3, 7);
                 weapon.GetFirearmData().AddToMaxMagCapacity(bonusCapacity);
-                return $"{weapon.name} Magazine Capacity increased by {bonusCapacity}";
+                return $"+{bonusCapacity} {weapon.name} Magazine Capacity";
             }
             return "";
         }
     }
+
 
 }
