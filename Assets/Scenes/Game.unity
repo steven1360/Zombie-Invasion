@@ -527,6 +527,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectToSpawn: {fileID: 1662081446}
   tilemap: {fileID: 1422350163}
+  path: {fileID: 530156613}
 --- !u!1 &94012546
 GameObject:
   m_ObjectHideFlags: 0
@@ -2312,6 +2313,21 @@ PrefabInstance:
       propertyPath: tilemap.Array.data[1]
       value: 
       objectReference: {fileID: 818047050}
+    - target: {fileID: 5381147602941352461, guid: 96ea0ef773009d44fa2840f2156a97a0,
+        type: 3}
+      propertyPath: mapGrid
+      value: 
+      objectReference: {fileID: 1281511887}
+    - target: {fileID: 5381147602941352461, guid: 96ea0ef773009d44fa2840f2156a97a0,
+        type: 3}
+      propertyPath: walls
+      value: 
+      objectReference: {fileID: 1422350163}
+    - target: {fileID: 5381147602941352461, guid: 96ea0ef773009d44fa2840f2156a97a0,
+        type: 3}
+      propertyPath: darkHoles
+      value: 
+      objectReference: {fileID: 818047050}
     - target: {fileID: 5381147602941352462, guid: 96ea0ef773009d44fa2840f2156a97a0,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3037,7 +3053,7 @@ GameObject:
   - component: {fileID: 818047049}
   - component: {fileID: 818047048}
   m_Layer: 11
-  m_Name: Tilemap (dark holes)
+  m_Name: Dark Holes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5975,7 +5991,7 @@ GameObject:
   - component: {fileID: 1402279887}
   - component: {fileID: 1402279886}
   m_Layer: 0
-  m_Name: Tilemap (without collider)
+  m_Name: Floor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -26146,7 +26162,7 @@ GameObject:
   - component: {fileID: 1422350162}
   - component: {fileID: 1422350164}
   m_Layer: 11
-  m_Name: Tilemap (with collider)
+  m_Name: Walls
   m_TagString: Tilemap
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -57778,6 +57794,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectToSpawn: {fileID: 640106842}
   tilemap: {fileID: 1422350163}
+  path: {fileID: 530156613}
 --- !u!1 &1782257802
 GameObject:
   m_ObjectHideFlags: 0

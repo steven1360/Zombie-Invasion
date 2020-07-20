@@ -7,16 +7,17 @@ using UnityEngine.Tilemaps;
 public class Grid 
 {
     private Node[,] arr;
+    private Tilemap tilemap;
     private int cellSize;
+
     public Vector2 Origin { get; private set; }
     public int Width { get; private set; }
     public int Height { get; private set; }
-    private Tilemap tilemap;
 
-    public Grid(Tilemap tilemap)
+    public Grid(Tilemap tilemap, int cellSize)
     {
         this.tilemap = tilemap;
-        cellSize = 2;
+        this.cellSize = cellSize;
         InitGrid();
         MarkUnwalkableNodes(tilemap);
     }
@@ -40,68 +41,20 @@ public class Grid
 
     public Node this[Vector3 position] {
         get {
-            Vector2Int indices = GetGridCoordinates(position);
+            Vector2Int indices = GetGridIndices(position);
             return this[indices.x, indices.y];
         }
 
         set {
-            Vector2Int indices = GetGridCoordinates(position);
+            Vector2Int indices = GetGridIndices(position);
             this[indices.x, indices.y] = value;
-        }
-    }
-
-    public Vector2Int GetGridCoordinates(Vector3 worldPosition)
-    {
-        int x = Mathf.RoundToInt((worldPosition.x - Origin.x) / cellSize);
-        int y = Mathf.RoundToInt((worldPosition.y - Origin.y) / cellSize);
-        return new Vector2Int(x, y);
-    }
-
-    void InitGrid()
-    {
-        Width = tilemap.cellBounds.size.x;
-        Height = tilemap.cellBounds.size.y;
-
-
-        arr = new Node[Width, Height];
-        Origin = new Vector2((tilemap.origin.x * 2) + 1, (tilemap.origin.y * 2) + 1);
-        arr[0, 0] = new Node(Origin);
-
-        
-
-        //fill bottom-most row
-        for (int x = 1; x < arr.GetLength(0); x++)
-        {
-            float worldPosition_x = arr[x - 1, 0].worldPosition.x + cellSize;
-            float worldPosition_y = arr[0, 0].worldPosition.y;
-            arr[x, 0] = new Node(new Vector2(worldPosition_x, worldPosition_y));
-        }
-
-
-        //fill left-most column
-        for (int y = 1; y < arr.GetLength(1); y++)
-        {
-            float worldPosition_x = arr[0, 0].worldPosition.x;
-            float worldPosition_y = arr[0, y - 1].worldPosition.y + cellSize;
-            arr[0, y] = new Node(new Vector2(worldPosition_x, worldPosition_y));
-        }
-
-        //fill rest of grid
-        for (int x = 1; x < arr.GetLength(0); x++)
-        {
-            for (int y = 1; y < arr.GetLength(1); y++)
-            {
-                float worldPosition_x = arr[x, y - 1].worldPosition.x;
-                float worldPosition_y = arr[x, y - 1].worldPosition.y + cellSize;
-                arr[x, y] = new Node(new Vector2(worldPosition_x, worldPosition_y));
-            }
         }
     }
 
     public void MarkUnwalkableNodes(Tilemap tMap)
     {
         BoundsInt bounds = tilemap.cellBounds;
-        TileBase[] allTiles = tMap.GetTilesBlock(bounds);
+        TileBase[] allTiles = tMap.GetTilesBlock(bounds); 
 
         for (int x = 0; x < bounds.size.x; x++)
         {
@@ -154,7 +107,7 @@ public class Grid
             }
 
             List<Node> neighbors = GetNeighbors(currentNode.worldPosition);
-            foreach(Node neighbor in neighbors)
+            foreach (Node neighbor in neighbors)
             {
                 if (closedList.Contains(neighbor)) continue;
 
@@ -185,7 +138,56 @@ public class Grid
         return null;
     }
 
-    List<Node> CalculatePath(Node end)
+    private void InitGrid()
+    {
+        Width = tilemap.cellBounds.size.x;
+        Height = tilemap.cellBounds.size.y;
+
+
+        arr = new Node[Width, Height];
+        // Add the halfsize of a cell so that each node represents the center of a tile rather
+        // than its leftmost corner
+        Origin = new Vector2((tilemap.origin.x * cellSize) + cellSize/2, (tilemap.origin.y * cellSize) + cellSize/2);
+        arr[0, 0] = new Node(Origin);
+
+
+        //fill bottom-most row
+        for (int x = 1; x < arr.GetLength(0); x++)
+        {
+            float worldPosition_x = arr[x - 1, 0].worldPosition.x + cellSize;
+            float worldPosition_y = arr[0, 0].worldPosition.y;
+            arr[x, 0] = new Node(new Vector2(worldPosition_x, worldPosition_y));
+        }
+
+
+        //fill left-most column
+        for (int y = 1; y < arr.GetLength(1); y++)
+        {
+            float worldPosition_x = arr[0, 0].worldPosition.x;
+            float worldPosition_y = arr[0, y - 1].worldPosition.y + cellSize;
+            arr[0, y] = new Node(new Vector2(worldPosition_x, worldPosition_y));
+        }
+
+        //fill rest of grid
+        for (int x = 1; x < arr.GetLength(0); x++)
+        {
+            for (int y = 1; y < arr.GetLength(1); y++)
+            {
+                float worldPosition_x = arr[x, y - 1].worldPosition.x;
+                float worldPosition_y = arr[x, y - 1].worldPosition.y + cellSize;
+                arr[x, y] = new Node(new Vector2(worldPosition_x, worldPosition_y));
+            }
+        }
+    }
+
+    private Vector2Int GetGridIndices(Vector3 worldPosition)
+    {
+        int x = Mathf.RoundToInt((worldPosition.x - Origin.x) / cellSize);
+        int y = Mathf.RoundToInt((worldPosition.y - Origin.y) / cellSize);
+        return new Vector2Int(x, y);
+    }
+
+    private List<Node> CalculatePath(Node end)
     {
         List<Node> path = new List<Node>();
         path.Add(end);
@@ -200,9 +202,9 @@ public class Grid
         return path;
     }
 
-    public List<Node> GetNeighbors(Vector3 position)
+    private List<Node> GetNeighbors(Vector3 position)
     {
-        Vector2Int indices = GetGridCoordinates(position);
+        Vector2Int indices = GetGridIndices(position);
         List<Node> neighbors = new List<Node>();
 
         Node top = this[indices.x, indices.y + 1];
@@ -221,7 +223,7 @@ public class Grid
         return neighbors;
     }
 
-    Node NodeWithLowestFScore(List<Node> list)
+    private Node NodeWithLowestFScore(List<Node> list)
     {
         float smallestF = list[0].f;
         Node lowestFnode = list[0];
@@ -238,8 +240,9 @@ public class Grid
         return lowestFnode;
     }
 
-    float CalculateDistanceCost(Node a, Node b)
+    private float CalculateDistanceCost(Node a, Node b)
     {
+        //Manhattan distance
         return Mathf.Abs(a.worldPosition.x - b.worldPosition.x) + Mathf.Abs(a.worldPosition.y - b.worldPosition.y);
     }
 

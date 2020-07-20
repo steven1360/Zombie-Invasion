@@ -7,6 +7,7 @@ public abstract class Spawner : MonoBehaviour
 {
     [SerializeField] protected Transform objectToSpawn;
     [SerializeField] private Tilemap tilemap;
+    [SerializeField] private Path path;
     private Clock clock;
     private float timeElapsed;
     private Grid grid;
@@ -17,7 +18,7 @@ public abstract class Spawner : MonoBehaviour
         Random.InitState(System.DateTime.Now.Millisecond);
         clock = new Clock(GetTimeBetweenSpawn(0), 0);
         timeElapsed = 0;
-        grid = new Grid(tilemap);
+        grid = path.grid;
     }
 
     // Update is called once per frame

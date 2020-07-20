@@ -5,7 +5,10 @@ using UnityEngine.Tilemaps;
 
 public class Path : MonoBehaviour
 {
-    [SerializeField] Tilemap[] tilemap;
+    [SerializeField] private UnityEngine.Grid mapGrid;
+    [SerializeField] private Tilemap walls;
+    [SerializeField] private Tilemap darkHoles;
+
     private List<Node> path;
     private int index;
     public Grid grid;
@@ -13,16 +16,22 @@ public class Path : MonoBehaviour
     void Awake()
     {
         Random.InitState(System.DateTime.Now.Millisecond);
-        grid = new Grid(tilemap[0]);
+        grid = new Grid(walls, Mathf.RoundToInt(mapGrid.cellSize.x));
         path = new List<Node>();
         index = 0;
-        grid.MarkUnwalkableNodes(tilemap[1]);
+        //Assume darkHoles tilemap share the same origin, width, and height as walls tilemap
+        //Indeed these tilemaps do not share any unwalkable nodes. Every unwalkable node either
+        //belongs to the walls tilemap or the darkHoles tilemap. The purpose of separating these
+        //tilemaps is to allow for bullets to pass through darkhole areas, while bullets that touch
+        //walls are destroyed instead. At the same time, the player cannot move through walls or darkholes.
+        grid.MarkUnwalkableNodes(darkHoles);
     }
-
 
     public void ComputeAStarPath(Vector3 start, Vector3 end) 
     {
         path = grid.GetShortestPath(start, end);
+        //Every computed path starts at the player's position. So the
+        //index must be reset to 0, which represents the starting position
         index = 0;
     }
 
@@ -53,7 +62,29 @@ public class Path : MonoBehaviour
         }
     }
 
-    void LookAt(Transform source, Vector2 targetToLookAt)
+    public Vector2 GetRandomWalkablePosition(Vector2 origin)
+    {
+        float dx;
+        float dy;
+        Vector2 randomPosition;
+
+        do
+        {
+            dx = Random.Range(-18f, 18f);
+            dy = Random.Range(-18f, 18f);
+            while (dx > -1 && dx < 1 && dy > -1 && dy < 1)
+            {
+                dx = Random.Range(-18f, 18f);
+                dy = Random.Range(-18f, 18f);
+            }
+
+            randomPosition = new Vector2(origin.x + dx, origin.y + dy);
+        } while ( ( grid[randomPosition] == null || !grid[randomPosition].walkable));
+
+        return randomPosition;
+    }
+
+    private void LookAt(Transform source, Vector2 targetToLookAt)
     {
         float dx = targetToLookAt.x - source.position.x;
         float dy = targetToLookAt.y - source.position.y;
@@ -76,27 +107,5 @@ public class Path : MonoBehaviour
         }
 
         source.root.eulerAngles = new Vector3(0, 0, angle);
-    }
-
-    public Vector2 GetRandomWalkablePosition(Vector2 origin)
-    {
-        float dx;
-        float dy;
-        Vector2 randomPosition;
-
-        do
-        {
-            dx = Random.Range(-18f, 18f);
-            dy = Random.Range(-18f, 18f);
-            while (dx > -1 && dx < 1 && dy > -1 && dy < 1)
-            {
-                dx = Random.Range(-18f, 18f);
-                dy = Random.Range(-18f, 18f);
-            }
-
-            randomPosition = new Vector2(origin.x + dx, origin.y + dy);
-        } while ( ( grid[randomPosition] == null || !grid[randomPosition].walkable));
-
-        return randomPosition;
     }
 }
