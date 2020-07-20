@@ -4,30 +4,27 @@ using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
-    [SerializeField]
-    private AudioClip[] audioClips;
+    [SerializeField] private AudioClip[] audioClips;
+    [SerializeField] private Camera mainCamera;
 
-    [SerializeField]
-    private Camera mainCam;
-
-    private Dictionary<string, AudioClip> dict;
+    private Dictionary<string, AudioClip> audioClips_dict;
     private AudioSource audioSource;
 
     // Start is called before the first frame update
     void Awake()
     {
-        dict = new Dictionary<string, AudioClip>();
+        audioClips_dict = new Dictionary<string, AudioClip>();
         audioSource = GetComponent<AudioSource>();
         foreach (AudioClip clip in audioClips)
         {
-            dict.Add(clip.name, clip);
+            audioClips_dict.Add(clip.name, clip);
         }
 
     }
 
     void Update()
     {
-        transform.position = mainCam.transform.position;
+        transform.position = mainCamera.transform.position;
 
         foreach (Transform child in GetComponentInChildren<Transform>())
         {
@@ -38,14 +35,17 @@ public class AudioManager : MonoBehaviour
         }
     }
 
+
     public void PlayClip(string clipName)
     {
 
-        if (!dict.TryGetValue(clipName, out AudioClip clip))
+        if (!audioClips_dict.TryGetValue(clipName, out AudioClip clip))
         {
             Debug.Log($"{clipName} does not exist in the dictionary.");
         }
 
+        //Need to create a new child audiosource if one is already playing on this gameobject
+        //so that the one that is already playing doesn't get interrupted
         if (audioSource.isPlaying)
         {
             GameObject obj = new GameObject();

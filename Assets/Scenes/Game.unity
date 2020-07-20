@@ -1154,6 +1154,11 @@ PrefabInstance:
       propertyPath: audioClips.Array.data[8]
       value: 
       objectReference: {fileID: 8300000, guid: 74811383a3e5fe44699636256c0cf355, type: 3}
+    - target: {fileID: 4292915052921770497, guid: 918a80b8b9c0e1d46b0bfa82b4677b57,
+        type: 3}
+      propertyPath: mainCamera
+      value: 
+      objectReference: {fileID: 702029189}
     - target: {fileID: 4292915052921770502, guid: 918a80b8b9c0e1d46b0bfa82b4677b57,
         type: 3}
       propertyPath: m_Name
