@@ -2,13 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TimeDisplay 
+public class TimeDisplay : MonoBehaviour
 {
+    [SerializeField] PlayerStatManager statManager;
     private float timeElapsed;
 
-    public void Tick(float dt)
+    void Update()
     {
-        timeElapsed += dt;
+        if (!statManager.IsDead())
+        {
+            timeElapsed += Time.deltaTime;
+        }
     }
 
     public string FormatTime()

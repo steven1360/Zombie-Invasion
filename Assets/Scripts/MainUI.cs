@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UI : MonoBehaviour
+public class MainUI : MonoBehaviour
 {
     [SerializeField] private PlayerStatManager statManager;
     [SerializeField] private PlayerWeaponController weaponController;
@@ -15,17 +15,11 @@ public class UI : MonoBehaviour
     [SerializeField] private Text killsDisplay;
     [SerializeField] private Text timeDisplay;
 
-    private TimeDisplay time;
+    [SerializeField] private TimeDisplay time;
 
-    void Start()
-    {
-        time = new TimeDisplay();
-    }
 
     void Update()
     {
-        time.Tick(Time.deltaTime);
-
         ammoDisplay.text = weaponController.EquippedWeapon.GetComponent<Weapon>().GetInfo();
         healthDisplay.text = $"Health: {statManager.Stats.Health}";
         supplyItemDisplay.text = $"{itemCollector.CollectedItemInfo}";
