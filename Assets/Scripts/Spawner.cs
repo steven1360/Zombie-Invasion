@@ -49,6 +49,6 @@ public abstract class Spawner : MonoBehaviour
 
     protected Transform GetRandomSpawnTransform()
     {
-        return transform.GetChild(Random.Range(1, transform.childCount));
+        return transform.GetChild(Random.Range(0, transform.childCount));
     }
 }

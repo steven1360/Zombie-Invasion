@@ -29,8 +29,8 @@ public class SupplyBoxSpawner : Spawner
             Transform obj = Instantiate(objectToSpawn);
 
             obj.gameObject.SetActive(true);
-            obj.position = nextSpawnLocation;
             nextSpawnLocation = spawnTransform.position;
+            obj.position = nextSpawnLocation;
             obj.parent = spawnTransform;
         }
     }
