@@ -2458,6 +2458,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1779801429}
     m_Modifications:
+    - target: {fileID: 6504245982635104784, guid: 07c1f176e87868f408b6584bd76799a7,
+        type: 3}
+      propertyPath: m_SleepingMode
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6504245982635105004, guid: 07c1f176e87868f408b6584bd76799a7,
         type: 3}
       propertyPath: m_Name
