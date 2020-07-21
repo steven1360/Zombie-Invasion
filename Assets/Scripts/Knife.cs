@@ -10,6 +10,8 @@ public class Knife : Weapon
     private Animator anim;
     private bool attacking;
 
+    public bool Attacking { get { return attacking; } }
+
     void Start()
     {
         anim = GetComponent<Animator>();

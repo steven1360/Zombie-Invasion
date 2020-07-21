@@ -39,7 +39,8 @@ public class PlayerWeaponController : MonoBehaviour
     void Update()
     {
         Firearm firearm = EquippedWeapon.GetComponent<Firearm>();
-        if (firearm != null && firearm.Reloading)
+        Knife knife = EquippedWeapon.GetComponent<Knife>();
+        if ( (firearm != null && firearm.Reloading) || (knife != null && knife.Attacking) )
         {
             return;
         }
