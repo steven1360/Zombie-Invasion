@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Firearm", menuName = "Firearm")]
-public class FirearmData : ScriptableObject
+public class FirearmStats : ScriptableObject
 {
     [SerializeField] private int currentMagazineCapacity;
     [SerializeField] private int maxMagazineCapacity;

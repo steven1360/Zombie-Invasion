@@ -44,7 +44,7 @@ public class Knife : Weapon
         }
     }
 
-    public override FirearmData GetFirearmData()
+    public override FirearmStats GetFirearmData()
     {
         return null;
     }

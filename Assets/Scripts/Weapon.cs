@@ -5,5 +5,5 @@ using UnityEngine;
 public abstract class Weapon : MonoBehaviour
 {
     public abstract string GetInfo();
-    public abstract FirearmData GetFirearmData();
+    public abstract FirearmStats GetFirearmData();
 }

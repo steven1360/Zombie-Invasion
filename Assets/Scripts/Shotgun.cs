@@ -7,9 +7,9 @@ public class Shotgun : Firearm
 
     override protected void DoAttackOnInput(bool keycodePressedDown)
     {
-        bool needToReload = (firearm.CurrentMagazineCapacity == 0);
+        bool needToReload = (firearmStats.CurrentMagazineCapacity == 0);
 
-        if (keycodePressedDown && !needToReload && !firearm.AttackInTimeout && !reloading)
+        if (keycodePressedDown && !needToReload && !firearmStats.AttackInTimeout && !reloading)
         {
             Vector3 aimControllerPosition = aimController.transform.position;
             Vector2[] bulletTravelDirections = new Vector2[3];
@@ -32,15 +32,15 @@ public class Shotgun : Firearm
 
 
             anim.SetTrigger("Shoot");
-            aud.PlayClip(attackAudioClipName);
+            audioManager.PlayClip(attackAudioClipName);
             muzzle_flash.gameObject.SetActive(true);
-            firearm.AddToCurrentMagCapacity(-1);
-            firearm.AttackTimeoutClock.ResetClock();
+            firearmStats.AddToCurrentMagCapacity(-1);
+            firearmStats.AttackTimeoutClock.ResetClock();
 
             for (int i = 0; i < 3; i++)
             {
                 bulletClones[i].gameObject.SetActive(true);
-                bulletClones[i].GetComponent<DamageSource>().SetDamageValue(firearm.DamageValue);
+                bulletClones[i].GetComponent<DamageSource>().SetDamageValue(firearmStats.DamageValue);
                 bulletClones[i].GetComponent<DamageSource>().SetKnockback(aimController.LookDirection * 0.65f);
                 bulletClones[i].position = aimControllerPosition;
                 bulletCloneRBs[i].velocity = bulletTravelDirections[i] * speed;

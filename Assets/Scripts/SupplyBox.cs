@@ -72,8 +72,8 @@ public class SupplyBox : MonoBehaviour
 
     public class PistolAmmo : Item
     {
-        private FirearmData stats;
-        public PistolAmmo(FirearmData stats) { this.stats = stats; }
+        private FirearmStats stats;
+        public PistolAmmo(FirearmStats stats) { this.stats = stats; }
         public override string UseItem()
         {
             if (stats != null)
@@ -89,8 +89,8 @@ public class SupplyBox : MonoBehaviour
 
     public class RifleAmmo : Item
     {
-        private FirearmData stats;
-        public RifleAmmo(FirearmData stats) { this.stats = stats; }
+        private FirearmStats stats;
+        public RifleAmmo(FirearmStats stats) { this.stats = stats; }
         public override string UseItem()
         {
             if (stats != null)
@@ -106,8 +106,8 @@ public class SupplyBox : MonoBehaviour
 
     public class ShotgunAmmo : Item
     {
-        private FirearmData stats;
-        public ShotgunAmmo(FirearmData stats) { this.stats = stats; }
+        private FirearmStats stats;
+        public ShotgunAmmo(FirearmStats stats) { this.stats = stats; }
         public override string UseItem()
         {
             if (stats != null)

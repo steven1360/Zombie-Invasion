@@ -15,8 +15,14 @@ public class PlayerWeaponController : MonoBehaviour
         weaponsList = new List<Transform>();
         weaponsDict = new Dictionary<string, Transform>();
 
+
         for (int i = 1; i < weapons.Length; i++)
         {
+            // GetComponentsInChildren includes child objects of all children
+            // e.g., includes Pistol's child object called bullet
+            // Don't want to include child objects of weapons, so
+            // checking if the child object's parent is the weapon controller
+            // is necessary, as done below
             if (weapons[i].parent == transform)
             {
                 weaponsList.Add(weapons[i]);

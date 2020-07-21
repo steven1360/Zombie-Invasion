@@ -944,6 +944,12 @@ Transform:
   m_Father: {fileID: 1779801429}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!50 &208773220 stripped
+Rigidbody2D:
+  m_CorrespondingSourceObject: {fileID: 4427987567601465029, guid: fb892468d50a234468a3c107744a8d67,
+    type: 3}
+  m_PrefabInstance: {fileID: 2843243779638077421}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &224748803
 GameObject:
   m_ObjectHideFlags: 0
@@ -59254,14 +59260,94 @@ PrefabInstance:
       propertyPath: aud
       value: 
       objectReference: {fileID: 228318658}
+    - target: {fileID: 2843243779722969413, guid: fb892468d50a234468a3c107744a8d67,
+        type: 3}
+      propertyPath: audioManager
+      value: 
+      objectReference: {fileID: 228318658}
+    - target: {fileID: 2843243779722969413, guid: fb892468d50a234468a3c107744a8d67,
+        type: 3}
+      propertyPath: firearmStats
+      value: 
+      objectReference: {fileID: 11400000, guid: 08c905418f6d763448516ea5b4084769,
+        type: 2}
     - target: {fileID: 4427987565762221401, guid: fb892468d50a234468a3c107744a8d67,
+        type: 3}
+      propertyPath: aud
+      value: 
+      objectReference: {fileID: 228318658}
+    - target: {fileID: 4427987565762221401, guid: fb892468d50a234468a3c107744a8d67,
+        type: 3}
+      propertyPath: firearmStats
+      value: 
+      objectReference: {fileID: 11400000, guid: ca9f8f59844c11143834dfc6b16d2880,
+        type: 2}
+    - target: {fileID: 4427987565762221401, guid: fb892468d50a234468a3c107744a8d67,
+        type: 3}
+      propertyPath: audioManager
+      value: 
+      objectReference: {fileID: 228318658}
+    - target: {fileID: 4427987565909995635, guid: fb892468d50a234468a3c107744a8d67,
+        type: 3}
+      propertyPath: rb
+      value: 
+      objectReference: {fileID: 208773220}
+    - target: {fileID: 4427987566311557130, guid: fb892468d50a234468a3c107744a8d67,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4427987566311557130, guid: fb892468d50a234468a3c107744a8d67,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4427987566311557141, guid: fb892468d50a234468a3c107744a8d67,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 471f8ebcf6bdf2e41a7c4a30b1b596a9,
+        type: 3}
+    - target: {fileID: 4427987566339448329, guid: fb892468d50a234468a3c107744a8d67,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 471f8ebcf6bdf2e41a7c4a30b1b596a9,
+        type: 3}
+    - target: {fileID: 4427987566339448334, guid: fb892468d50a234468a3c107744a8d67,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4427987566339448334, guid: fb892468d50a234468a3c107744a8d67,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4427987566339448334, guid: fb892468d50a234468a3c107744a8d67,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4427987566339448334, guid: fb892468d50a234468a3c107744a8d67,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4427987566656946334, guid: fb892468d50a234468a3c107744a8d67,
         type: 3}
       propertyPath: aud
       value: 
       objectReference: {fileID: 228318658}
     - target: {fileID: 4427987566656946334, guid: fb892468d50a234468a3c107744a8d67,
         type: 3}
-      propertyPath: aud
+      propertyPath: firearmStats
+      value: 
+      objectReference: {fileID: 11400000, guid: 661c4ec6f0b0c6b4a809379c6b428dc3,
+        type: 2}
+    - target: {fileID: 4427987566656946334, guid: fb892468d50a234468a3c107744a8d67,
+        type: 3}
+      propertyPath: audioManager
       value: 
       objectReference: {fileID: 228318658}
     - target: {fileID: 4427987566666880026, guid: fb892468d50a234468a3c107744a8d67,
@@ -59274,6 +59360,22 @@ PrefabInstance:
       propertyPath: aud
       value: 
       objectReference: {fileID: 228318658}
+    - target: {fileID: 4427987567577003982, guid: fb892468d50a234468a3c107744a8d67,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 471f8ebcf6bdf2e41a7c4a30b1b596a9,
+        type: 3}
+    - target: {fileID: 4427987567577003983, guid: fb892468d50a234468a3c107744a8d67,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4427987567577003983, guid: fb892468d50a234468a3c107744a8d67,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.8
+      objectReference: {fileID: 0}
     - target: {fileID: 4427987567601465017, guid: fb892468d50a234468a3c107744a8d67,
         type: 3}
       propertyPath: m_LocalPosition.x
