@@ -1,6 +1,4 @@
 # Zombie Invasion
-
-## Overview
 Zombie Invasion is a 2D topdown survival and shooter game made with Unity and C#.
 
 ## How To Play
