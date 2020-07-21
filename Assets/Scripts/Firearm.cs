@@ -24,12 +24,12 @@ public class Firearm : Weapon
         muzzle_flash = transform.GetChild(1);
         bullet.gameObject.SetActive(false);
         muzzle_flash.gameObject.SetActive(false);
-        reloading = false;
     }
 
     void Awake()
     {
         firearmStats = Instantiate(firearmStats);
+        reloading = false;
     }
 
     void Update()
